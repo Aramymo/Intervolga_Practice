@@ -39,7 +39,6 @@ class SQLiteQuery{
         if ($page <= 0) {
             $page = 1;
         }
-        echo $page;
         $page_first_result = ($page-1) * $results_per_page;
         $stmt = $this->pdo->prepare('SELECT * FROM reviews
                                      ORDER BY review_date DESC LIMIT :page_first_result, :results_per_page;');
@@ -61,11 +60,20 @@ class SQLiteQuery{
         }
         return json_encode($reviews,JSON_UNESCAPED_UNICODE);
     }
-    public function addReview()
+    public function addReview($username, $rating, $comment)
     {
-        
+        $review_date = date("Y-m-d");
+        $stmt = $this->pdo->prepare('INSERT INTO reviews (username,rating,review_date,comment)
+                                     VALUES (:username, :rating, :review_date, :comment);');
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':rating', $rating);
+        $stmt->bindParam(':review_date', $review_date);
+        $stmt->bindParam(':comment', $comment);
+        $result = $stmt->execute();
+        return json_encode($result);
     }
-
+//CoolTesterGuy
+//I'm THE CoolTesterGuy and I am here to test.
     public function deleteReview()
     {
 
