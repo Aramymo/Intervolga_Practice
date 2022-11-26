@@ -30,7 +30,7 @@
             <label>Comment</label>
             <input type="text" name="comment">
         </div>
-        <input type="submit" value="Add review">
+        <input type="submit" value="Send review">
     </form>
 </div>
 </body>
