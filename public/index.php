@@ -2,29 +2,23 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Slim\Views\PhpRenderer;
 use App\SQLiteConnection;
 use App\SQLiteQuery;
 
 require __DIR__ . '/../vendor/autoload.php';
-//require_once(dirname(__DIR__).'/app/dependencies.php');
-header('Content-type: application/json; charset=utf-8');
 $app = AppFactory::create();
+$container = $app->getContainer();
 
-//$app->get('/', function (Request $request, Response $response, $args) {
-//    $response->getBody()->write("Hello world!");
-//    return $response;
-//});
 
 $app->get('/', function (Request $request, Response $response){
-    $pdo = (new SQLiteConnection())->connect();
-    if($pdo != null)
-        echo 'aboba';
-    else
-        echo 'amogus';
-    return $response;
+    header('Content-type: text/html; charset=utf-8');
+    $renderer = new PhpRenderer('./templates');
+    return $renderer->render($response,"reviews.phtml");
 });
 
 $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response, array $args){
+    header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
     if($pdo != null)
         echo 'aboba';
@@ -37,6 +31,7 @@ $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response
     return $response;
 });
 $app->get('/api/feedbacks/page/{page}/', function (Request $request, Response $response, array $args){
+    header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
     if($pdo != null)
         echo 'abobus';
@@ -48,14 +43,6 @@ $app->get('/api/feedbacks/page/{page}/', function (Request $request, Response $r
     echo $result;
     return $response;
 });
-//$app->get('/db-test', function (Request $request, Response $response) {
-//    $db = $this->get(PDO::class);
-//    $sth = $db->prepare("SELECT * FROM reviews");
-//    $sth->execute();
-//    $data = $sth->fetchAll(PDO::FETCH_ASSOC);
-//    $payload = json_encode($data);
-//    $response->getBody()->write($payload);
-//    return $response->withHeader('Content-Type', 'application/json');
-//});
+
 
 $app->run();

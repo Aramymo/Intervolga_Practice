@@ -61,4 +61,13 @@ class SQLiteQuery{
         }
         return json_encode($reviews,JSON_UNESCAPED_UNICODE);
     }
+    public function addReview()
+    {
+        
+    }
+
+    public function deleteReview()
+    {
+
+    }
 }
