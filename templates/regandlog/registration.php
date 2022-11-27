@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+}
+if (isset($_GET['logout'])) {
+    session_destroy();
+    unset($_SESSION['username']);
+}
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,7 +17,7 @@
 <!--    <link rel="stylesheet" type="text/css" href="../CSS/style.css">-->
 </head>
 <body>
-
+<a href="../">На главную</a>
     <form method="post" action="/registration">
         <div>
             <label>Имя пользователя</label>
@@ -14,21 +25,21 @@
         </div>
         <div>
             <label>Электронная почта</label>
-            <input type="email" name="email">
+            <input type="email" name="user_email">
         </div>
         <div>
             <label>Пароль</label>
-            <input type="password" name="password_1">
+            <input type="password" name="password1">
         </div>
         <div>
             <label>Повторите пароль</label>
-            <input type="password" name="password_2">
+            <input type="password" name="password2">
         </div>
         <div>
             <button type="submit" name="reg_user">Создать аккаунт</button>
         </div>
         <p>
-            Уже зарегистрированы? <a href="login.php">Войдите в аккаунт</a>
+            Уже зарегистрированы? <a href="../login">Войдите в аккаунт</a>
         </p>
     </form>
 </body>

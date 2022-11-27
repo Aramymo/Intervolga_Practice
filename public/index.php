@@ -24,6 +24,26 @@ $app->get('/login', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates/regandlog/');
     return $renderer->render($response,"login.php");
 });
+$app->post('/login', function (Request $request, Response $response){
+    $pdo = (new SQLiteConnection())->connect();
+    $sqlite = new RegistrationAndLogin($pdo);
+    $data = $request->getParsedBody();
+    $username = $data['username'];
+    $password = $data['password'];
+    if($sqlite->checkLoginData($username,$password))
+    {
+        if($sqlite->loginUser($username,$password))
+            echo "abafbabaabab";
+        else
+            echo "akfkafkafkakfakfakfk";
+        return $response->withHeader('Location','/');
+    }
+    else
+    {
+        echo "aboba";
+        return $response->withHeader('Location','/api/add_review/');
+    }
+});
 
 $app->get('/registration', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates/regandlog/');

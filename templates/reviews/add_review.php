@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+}
+if (isset($_GET['logout'])) {
+    session_destroy();
+    unset($_SESSION['username']);
+}
+?>
 <!DOCTYPE html>
 <html lang="ru-en">
 <head>
@@ -5,7 +16,7 @@
     <title>Feedback</title>
 </head>
 <body>
-<h1>Welcome to the feedback page</h1>
+<h1>Welcome to the feedback page Session Name: <?php echo $_SESSION['username']; ?></h1>
 <p>Please give your review in the form below:</p>
 <div>
     <form method="POST" action="/api/add_review/">
