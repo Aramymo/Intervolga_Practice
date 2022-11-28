@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You must log in first";
@@ -19,6 +18,14 @@ if (isset($_GET['logout'])) {
 <body>
 <a href="../">На главную</a>
     <form method="post" action="/registration">
+        <?php
+        if (isset($_SESSION['registration_errors'])) : ?>
+        <div>
+            <?php foreach ($_SESSION['registration_errors'] as $error) : ?>
+                <p><?php echo $error ?></p>
+            <?php endforeach ?>
+        </div>
+        <?php  endif ?>
         <div>
             <label>Имя пользователя</label>
             <input type="text" name="username">
@@ -36,7 +43,7 @@ if (isset($_GET['logout'])) {
             <input type="password" name="password2">
         </div>
         <div>
-            <button type="submit" name="reg_user">Создать аккаунт</button>
+            <button type="submit" name="reg_user" value="<?php unset($_SESSION['registration_errors']) ?>">Создать аккаунт</button>
         </div>
         <p>
             Уже зарегистрированы? <a href="../login">Войдите в аккаунт</a>
