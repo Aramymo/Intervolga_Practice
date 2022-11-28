@@ -12,36 +12,28 @@ if (isset($_GET['logout'])) {
 <html lang="ru-en">
 <head>
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <title>Feedback</title>
+    <style>
+        <?php include "templates/css/reviews.css" ?>
+        <?php include "templates/css/stars.css" ?>
+    </style>
 </head>
 <body>
-<h1>Welcome to the feedback page Session Name: <?php echo $_SESSION['username']; ?></h1>
-<p>Please give your review in the form below:</p>
+<div class="sticky-header" id="sticky_header">
+    <a href="/" class="home_button">Go Home</a>
+</div>
 <div>
-    <form method="POST" action="/api/add_review/">
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username">
+    <form method="post" action="/api/add_review/" class="form-design">
+        <div class="centered_text form-header">REVIEW</div>
+        <div class="form-container">
+            <input type="text" name="username" value="<?php echo $_SESSION['username']?>">
+            <?php include "stars.html"?>
+            <input type="text" name="comment" placeholder="Leave your comment!"">
+            <button type="submit" name="Send review" class="btn-login">Оставить отзыв</button>
         </div>
-        <div>
-            <label>Rating:</label>
-            <input type="radio" name="rating" value="1">
-            <input type="radio" name="rating" value="2">
-            <input type="radio" name="rating" value="3">
-            <input type="radio" name="rating" value="4">
-            <input type="radio" name="rating" value="5">
-            <input type="radio" name="rating" value="6">
-            <input type="radio" name="rating" value="7">
-            <input type="radio" name="rating" value="8">
-            <input type="radio" name="rating" value="9">
-            <input type="radio" name="rating" value="10">
-        </div>
-        <div>
-            <label>Comment</label>
-            <input type="text" name="comment">
-        </div>
-        <input type="submit" value="Send review">
     </form>
 </div>
+<script> <?php include"../scripts/stickyHeader.js"?></script>
 </body>
 </html>

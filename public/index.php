@@ -58,6 +58,12 @@ $app->post('/login', function (Request $request, Response $response){
 });
 
 $app->get('/registration', function (Request $request, Response $response){
+    if(isset($_SESSION['username']))
+    {
+        return $response
+            ->withHeader('Location','/')
+            ->withStatus(302);
+    }
     $renderer = new PhpRenderer('./templates/regandlog/');
     return $renderer->render($response,"registration.php");
 });
@@ -75,6 +81,7 @@ $app->post('/registration', function (Request $request, Response $response){
     if(count($errors) == 0)
     {
         $sqlite->registerUser($username,$user_email,$password1);
+        $sqlite->loginUser($username,$password1);
         unset($_SESSION['registration_errors']);
         return $response
             ->withHeader('location','/')
@@ -103,18 +110,14 @@ $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response
     return $response
         ->withHeader('content-type','application/json');
 });
-$app->get('/api/feedbacks/page/{page}/', function (Request $request, Response $response, array $args){
+$app->get('/api/feedbacks/page={page}', function (Request $request, Response $response, array $args){
     $pdo = (new SQLiteConnection())->connect();
-    if($pdo != null)
-        echo 'abobus';
-    else
-        echo 'amogus';
     $sqlite = new SQLiteQuery($pdo);
     $page = (int)$args['page'];
-    $result = $sqlite->getAll($page);
-    $response->getBody()->write($result);
-    return $response
-        ->withHeader('content-type','application/json');
+    $results = $sqlite->getAll($page);
+    //$_SESSION['reviews'] = $result;
+    $renderer = new PhpRenderer('./templates/');
+    return $renderer->render($response,"review_pages.php",["results" => $results]);
 });
 
 $app->get('/api/add_review/', function (Request $request, Response $response, array $args){
