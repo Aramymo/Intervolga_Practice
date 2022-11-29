@@ -82,7 +82,6 @@ class RegistrationAndLogin
             return $errors;
         }
         else{
-            array_push($errors, "Success");
             return $errors;
         }
     }

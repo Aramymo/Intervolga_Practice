@@ -1,10 +1,11 @@
 <?php
+session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You must log in first";
 }
 if (isset($_GET['logout'])) {
-    session_destroy();
     unset($_SESSION['username']);
+    session_destroy();
 }
 ?>
 <!DOCTYPE html>
@@ -28,7 +29,7 @@ if (isset($_GET['logout'])) {
                 </div>
             <input type="text" name="username" id="username" placeholder="Username">
             <input type="password" name="password" id="password" placeholder="Password">
-            <button type="submit" name="login_user" class="btn-login" value="<?php unset($_SESSION['login_errors']) ?>">Войти в аккаунт</button>
+            <button type="submit" name="login_user" class="btn-login" value="">Войти в аккаунт</button>
             У вас ещё нет аккаунта? <a href="registration.php">Зарегестрируйтесь</a>!
         </div>
 </form>

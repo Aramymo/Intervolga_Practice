@@ -11,8 +11,6 @@ use App\Config;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-session_start();
-
 $app = AppFactory::create();
 $app->addErrorMiddleware(true,true,false);
 $app->addBodyParsingMiddleware();
@@ -32,31 +30,20 @@ $app->post('/login', function (Request $request, Response $response){
     if(count($errors) == 0)
     {
         $sqlite->loginUser($username,$password);
-        unset($_SESSION['login_errors']);
         $response->getBody()->write(json_encode($errors));
+//        $_SESSION['username'] = $username;
         return $response
             ->withHeader("Access-Control-Allow-Origin",'*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
     }
     else
     {
-        $_SESSION['login_errors'] = $errors;
         $response->getBody()->write(json_encode($errors));
         return $response
             ->withHeader("Access-Control-Allow-Origin",'*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
     }
 });
-//$app->get('/registration', function (Request $request, Response $response){
-//    if(isset($_SESSION['username']))
-//    {
-//        return $response
-//            ->withHeader('Location','/')
-//            ->withStatus(302);
-//    }
-//    $renderer = new PhpRenderer('./templates/regandlog/');
-//    return $renderer->render($response,"registration.php");
-//});
 $app->post('/registration', function (Request $request, Response $response){
     //header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
@@ -70,8 +57,8 @@ $app->post('/registration', function (Request $request, Response $response){
     if(count($errors) == 0)
     {
         $sqlite->registerUser($username,$user_email,$password1);
-        //$sqlite->loginUser($username,$password1);
-        unset($_SESSION['registration_errors']);
+        $sqlite->loginUser($username,$password1);
+//        $_SESSION['username'] = $username;
         $response->getBody()->write(json_encode($errors));
         return $response
             ->withHeader("Access-Control-Allow-Origin",'*')
@@ -79,7 +66,6 @@ $app->post('/registration', function (Request $request, Response $response){
     }
     else
     {
-        $_SESSION['registration_errors'] = $errors;
         $response->getBody()->write(json_encode($errors));
         return $response
             ->withHeader("Access-Control-Allow-Origin",'*')
@@ -116,17 +102,6 @@ $app->get('/api/feedbacks/', function (Request $request, Response $response, arr
     return $response->withHeader("Access-Control-Allow-Origin",'*');
 });
 
-$app->get('/api/add_review/', function (Request $request, Response $response, array $args){
-    if(!isset($_SESSION['username']))
-    {
-        return $response
-            ->withHeader('Location','/')
-            ->withStatus(302);
-    }
-    $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"add_review.php");
-});
-
 $app->post('/api/add_review/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
@@ -135,27 +110,27 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
     $username = $data['username'];
     $rating = $data['rating'];
     $comment = $data['comment'];
-    $sqlite->addReview($username, $rating, $comment);
+    $response->getbody()->write($sqlite->addReview($username, $rating, $comment));
     return $response
-        ->withHeader('Location', '/api/add_review/')
-        ->withStatus(302);
+        ->withHeader("Access-Control-Allow-Origin",'*')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
 });
 
 $app->get('/api/delete_review/', function (Request $request, Response $response, array $args){
     header('Content-type: text/html; charset=utf-8');
-    if(isset($_SESSION['username']) && $_SESSION['username'] == Config::ADMIN_LOGIN)
-    {
-        $renderer = new PhpRenderer('./templates/reviews/');
-        $pdo = (new SQLiteConnection())->connect();
-        $sqlite = new SQLiteQuery($pdo);
-        $sqlite->getAllWithoutPages();
-        return $renderer->render($response,"delete_review.php");
-    }
-    else
-    {
+//    if(isset($_SESSION['username']) && $_SESSION['username'] == Config::ADMIN_LOGIN)
+//    {
+//        $renderer = new PhpRenderer('./templates/reviews/');
+//        $pdo = (new SQLiteConnection())->connect();
+//        $sqlite = new SQLiteQuery($pdo);
+//        $sqlite->getAllWithoutPages();
+//        return $renderer->render($response,"delete_review.php");
+//    }
+    //else
+    //{
         return $response
             ->withStatus(404);
-    }
+    //}
 });
 $app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');

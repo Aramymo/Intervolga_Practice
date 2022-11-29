@@ -16,9 +16,16 @@ $("form").submit(function(event){
             console.log("aboba");
         }
     }).done(function(response){
-        for(var i=0; i<response.length; i++)
+        if(response.length == 0)
         {
-            document.getElementById('error-div').innerHTML += "<p>" + response[i] + "</p>";
+
+        }
+        else
+        {
+            for(var i=0; i<response.length; i++)
+            {
+                document.getElementById('error-div').innerHTML += "<p>" + response[i] + "</p>";
+            }
         }
     });
     event.preventDefault();

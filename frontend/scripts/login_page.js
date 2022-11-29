@@ -11,9 +11,17 @@ $("form").submit(function(event){
         data: formData,
         encode: true,
     }).done(function(response){
-        for(var i=0; i<response.length; i++)
+        console.log(response);
+        if(response.length == 0)
         {
-            document.getElementById('error-div').innerHTML += "<p>" + response[i] + "</p>";
+            sessionStorage.setItem('username', formData.username);
+        }
+        else
+        {
+            for(var i=0; i<response.length; i++)
+            {
+                document.getElementById('error-div').innerHTML += "<p>" + response[i] + "</p>";
+            }
         }
     });
     event.preventDefault();

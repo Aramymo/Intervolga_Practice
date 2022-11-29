@@ -1,11 +1,11 @@
 <?php
-
+session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You must log in first";
 }
 if (isset($_GET['logout'])) {
-    session_destroy();
     unset($_SESSION['username']);
+    session_destroy();
 }
 ?>
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ if (isset($_GET['logout'])) {
                     <a href="/api/add_review/"><button class="button2"><span>Leave a review</span></button></a>
                 </div>
                 <div>
-                    <p> <a href="/?logout=1"><button class="button1"><span>Logout :c</span></button></a> </p>
+                    <p> <a href="/?logout=1"><button class="button1" ><span>Logout :c</span></button></a> </p>
                     <p> <a href="/api/feedbacks/page=1"><button class="button2"><span>Check out reviews</span></button></a> </p>
                 </div>
             </div>
@@ -40,8 +40,9 @@ if (isset($_GET['logout'])) {
                     <h6>You have to be logged in to leave a review but you can see reviews of others.</h6>
                 </div>
                 <div>
-                    <p> <a href="regandlog/login.php"><button class="button1"><span>Login</span></button></a> </p>
-                    <p> <a href="/review_pages.php"><button class="button2"><span>Check out reviews</span></button></a> </p>
+<!--                    <p> <a href="regandlog/login.php"><button class="button1"><span>Login</span></button></a> </p>-->
+                    <p> <a href="reviews/add_review.php"><button class="button1" ><span>Add review</span></button></a>
+                    <p> <a href="review_pages.php"><button class="button2"><span>Check out reviews</span></button></a> </p>
                 </div>
             </div>
         <?php endif ?>

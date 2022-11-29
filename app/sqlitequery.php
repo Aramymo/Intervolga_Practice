@@ -35,7 +35,6 @@ class SQLiteQuery{
         $number_of_rows = $this->pdo->query('select count(*) from reviews')->fetchColumn();
         $results_per_page = 20;
         $number_of_pages = ceil($number_of_rows/$results_per_page);
-        $_SESSION['pages'] = $number_of_pages;
         if ($page <= 0) {
             $page = 1;
         }
