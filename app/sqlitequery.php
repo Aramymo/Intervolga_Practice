@@ -60,6 +60,7 @@ class SQLiteQuery{
                 'rating' => $row['rating'],
                 'review_date' => $row['review_date'],
                 'comment' => $row['comment'],
+                'number_of_pages' => $number_of_pages,
             ];
         }
         return json_encode($reviews,JSON_UNESCAPED_UNICODE);

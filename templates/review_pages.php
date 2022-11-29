@@ -54,6 +54,7 @@ $reviews = json_decode($json_data,true);
             <p><?php echo $review['comment']?></p>
         </div>
     </div>
+<!--<button value="2" onclick="showUser(this.value)">CALL AJAX</button>-->
 <?php endforeach ?>
 </div>
 <div class="centered_text">

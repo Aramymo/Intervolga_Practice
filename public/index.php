@@ -111,20 +111,19 @@ $app->get('/api/feedbacks/page={page}', function (Request $request, Response $re
     $sqlite = new SQLiteQuery($pdo);
     $page = (int)$args['page'];
     $results = $sqlite->getAll($page);
-//    $response->getBody()->write($results);
-//    return $response->withHeader('Content-type','application/json');
-    $renderer = new PhpRenderer('./templates/');
-    return $renderer->render($response,"review_pages.php",["results" => $results]);
-});
-
-//$app->get('/api/feedbacks/', function (Request $request, Response $response, array $args){
-//    $pdo = (new SQLiteConnection())->connect();
-//    $sqlite = new SQLiteQuery($pdo);
-//    $page = $_GET['q'];
-//    $results = $sqlite->getAll($page);
+    $response->getBody()->write($results);
+    return $response->withHeader("Access-Control-Allow-Origin",'*');
 //    $renderer = new PhpRenderer('./templates/');
 //    return $renderer->render($response,"review_pages.php",["results" => $results]);
-//});
+});
+
+$app->get('/api/feedbacks/', function (Request $request, Response $response, array $args){
+    $pdo = (new SQLiteConnection())->connect();
+    $sqlite = new SQLiteQuery($pdo);
+    $results = $sqlite->getAll(1);
+    $response->getBody()->write($results);
+    return $response->withHeader("Access-Control-Allow-Origin",'*');
+});
 
 $app->get('/api/add_review/', function (Request $request, Response $response, array $args){
     if(!isset($_SESSION['username']))

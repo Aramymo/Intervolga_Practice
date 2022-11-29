@@ -1,0 +1,196 @@
+/*.container*/
+/*{*/
+/*    height: 400px;*/
+/*    width: 1920px;*/
+/*}*/
+/*.WelcomePage{*/
+/*    height: 600px;*/
+/*    width: 800px;*/
+/*    background-color: aquamarine;*/
+/*}*/
+#navlist {
+    float: right;
+}
+.nav-li{
+    display: inline;
+    list-style-type: square;
+    padding-right: 20px;
+}
+.home_button{
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+    float: left
+}
+.home_button:hover
+{
+    color: #f4511e;
+}
+.div-box {
+    width: 800px;
+    margin: 0 auto;
+    display: table;
+}
+
+.div-box > div{display: table-cell}
+.child {
+    border: 1px solid indigo;
+    padding: 5%;
+}
+.float-left-child {
+    float: left;
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.centered_text{
+    display: flex;
+    justify-content: center;
+}
+.page_link{
+    color: #f4511e;
+    margin-left: 5px;
+}
+
+.review_block
+{
+    width:30%;
+    border: 1px solid indigo;
+    margin-bottom: 1%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button1 {
+    width: 150px;
+}
+
+.button2 {
+    width: 275px;
+}
+
+.button3 {
+    height: 40px;
+    width: 100px;
+}
+.button1, .button2,.button3 {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #f4511e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 24px;
+    padding: 10px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 10px;
+}
+.button1 span, .button2 span, .button3 span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.btn{
+    color: white;
+}
+.btn:hover{
+    color: black;
+    background-color: #f4511e;
+}
+
+
+.button1 span:after, .button2 span:after, .button3 span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.button1:hover span, .button2:hover span, .button3:hover span {
+    padding-right: 25px;
+}
+
+.button1:hover span:after, .button2:hover span:after, .button3:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.sticky-header {
+    height:60px;
+    padding: 10px 16px;
+    background: #4B0082FF;
+    color: #f1f1f1;
+}
+
+.sticky {
+    position: fixed;
+    width: 100%;
+}
+
+.form-header{
+    background-color: #f4511e;
+    max-height: 30%;
+    border-start-start-radius: 10px;
+    border-start-end-radius: 10px;
+    font-size: 24px;
+    font-weight: 700;
+}
+.form-design{
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    max-height: 400px;
+    margin: auto;
+    margin-top: 10%;
+}
+.form-container{
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+    max-width: 400px;
+}
+.form-container input, .form-container .btn-login {
+    width: 100%;
+    margin: 5px 0;
+    height: 45px;
+    vertical-align: middle;
+    font-size: 16px;
+}
+.form-container input {
+    border: 1px solid #dddfe2;
+    color: #1d2129;
+    padding: 0 8px;
+    outline: none;
+}
+.form-container input:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px #e7f3ff;
+}
+
+.form-container .btn-login {
+    background-color: #f4511e;
+    border: none;
+    border-radius: 6px;
+    font-size: 20px;
+    padding: 0 16px;
+    color: black;
+    font-weight: 700;
+}
+.btn-login:hover{
+    background-color: #4B0082FF;
+    color: white;
+}
