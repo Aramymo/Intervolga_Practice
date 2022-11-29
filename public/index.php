@@ -22,17 +22,6 @@ $app->get('/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates');
     return $renderer->render($response,"reviews.php");
 });
-
-$app->get('/login', function (Request $request, Response $response){
-    if(isset($_SESSION['username']))
-    {
-        return $response
-            ->withHeader('Location','/')
-            ->withStatus(302);
-    }
-    $renderer = new PhpRenderer('./templates/regandlog/');
-    return $renderer->render($response,"login.php");
-});
 $app->post('/login', function (Request $request, Response $response){
     $pdo = (new SQLiteConnection())->connect();
     $sqlite = new RegistrationAndLogin($pdo);
@@ -44,30 +33,30 @@ $app->post('/login', function (Request $request, Response $response){
     {
         $sqlite->loginUser($username,$password);
         unset($_SESSION['login_errors']);
+        $response->getBody()->write(json_encode($errors));
         return $response
-            ->withHeader('Location','/')
-            ->withStatus(302);
+            ->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
     }
     else
     {
         $_SESSION['login_errors'] = $errors;
+        $response->getBody()->write(json_encode($errors));
         return $response
-            ->withHeader('Location','/login')
-            ->withStatus(302);
+            ->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
     }
 });
-
-$app->get('/registration', function (Request $request, Response $response){
-    if(isset($_SESSION['username']))
-    {
-        return $response
-            ->withHeader('Location','/')
-            ->withStatus(302);
-    }
-    $renderer = new PhpRenderer('./templates/regandlog/');
-    return $renderer->render($response,"registration.php");
-});
-
+//$app->get('/registration', function (Request $request, Response $response){
+//    if(isset($_SESSION['username']))
+//    {
+//        return $response
+//            ->withHeader('Location','/')
+//            ->withStatus(302);
+//    }
+//    $renderer = new PhpRenderer('./templates/regandlog/');
+//    return $renderer->render($response,"registration.php");
+//});
 $app->post('/registration', function (Request $request, Response $response){
     //header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
@@ -81,18 +70,20 @@ $app->post('/registration', function (Request $request, Response $response){
     if(count($errors) == 0)
     {
         $sqlite->registerUser($username,$user_email,$password1);
-        $sqlite->loginUser($username,$password1);
+        //$sqlite->loginUser($username,$password1);
         unset($_SESSION['registration_errors']);
+        $response->getBody()->write(json_encode($errors));
         return $response
-            ->withHeader('location','/')
-            ->withStatus(302);
+            ->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
     }
     else
     {
         $_SESSION['registration_errors'] = $errors;
+        $response->getBody()->write(json_encode($errors));
         return $response
-            ->withHeader('location','/registration')
-            ->withStatus(302);
+            ->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
     }
 });
 

@@ -51,11 +51,6 @@ class RegistrationAndLogin
             array_push($errors, "Пароль должен состоять из минимум 6 символов и должен включать в себя как минимум одну букву в верхнем и нижнем регистре, число и специальный символ");
         }
         return $errors;
-//        echo count($errors);
-//        if (count($errors) == 0) {
-//            return true;
-//        }
-//        else return false;
     }
     public function loginUser($username,$password)
     {
@@ -78,15 +73,17 @@ class RegistrationAndLogin
                 'password' => $row['password'],
             ];
         }
-        if (empty($username)) {
-            array_push($errors, "Введите имя пользователя");
+        if (empty($username) || empty($password)) {
+            array_push($errors, "Введите имя пользователя и пароль");
+            return $errors;
         }
-        if (empty($password)) {
-            array_push($errors, "Введите пароль");
-        }
-        if (!password_verify($password, $results[0]['password']) || count($results) ==0) {
+        else if (!password_verify($password, $results[0]['password']) || count($results) ==0) {
             array_push($errors, "Неправильные имя пользователя или пароль");
+            return $errors;
         }
-        return $errors;
+        else{
+            array_push($errors, "Success");
+            return $errors;
+        }
     }
 }

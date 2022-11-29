@@ -40,7 +40,7 @@ if (isset($_GET['logout'])) {
                     <h6>You have to be logged in to leave a review but you can see reviews of others.</h6>
                 </div>
                 <div>
-                    <p> <a href="/login"><button class="button1"><span>Login</span></button></a> </p>
+                    <p> <a href="regandlog/login.php"><button class="button1"><span>Login</span></button></a> </p>
                     <p> <a href="/review_pages.php"><button class="button2"><span>Check out reviews</span></button></a> </p>
                 </div>
             </div>

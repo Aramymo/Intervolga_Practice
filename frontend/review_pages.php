@@ -22,10 +22,10 @@ if (isset($_GET['logout'])) {
 </head>
 <body>
 <div class="sticky-header" id="sticky_header">
-    <a href="/" class="home_button">Go Home</a>
+    <a href="reviews.php" class="home_button">Go Home</a>
     <div>
         <ul id="navlist">
-            <li class="nav-li"><a href="/login"><button class="btn">Log in</button></a></li>
+            <li class="nav-li"><a href="regandlog/login.php"><button class="btn">Log in</button></a></li>
         </ul>
     </div>
 </div>
@@ -39,52 +39,9 @@ if (isset($_GET['logout'])) {
 </div>
 <div class="centered_text">
 <!--    pages-->
-    <script> <?php include"scripts/stickyHeader.js"?></script>
-    <script> <?php include "scripts/jquery-3.6.1.js"?></script>
-    <script>
-        document.onload = showUser(1);
-            function showUser(str)
-            {
-                $.ajax({
-                    url: "http://localhost:8888/api/feedbacks/page="+str,
-                    type: "GET",
-                    dataType: "json",
-                    cache: false,
-                    success: function (response) {
-                        document.getElementById('reviews').innerHTML = '';
-                        document.getElementById('pages').innerHTML = '';
-                        for (var num_of_pages = 1; num_of_pages < response[0]['number_of_pages'] + 1; num_of_pages++)
-                        {
-                            document.getElementById("pages").innerHTML += "<a id='" + num_of_pages +
-                                "' class = 'page_link' onclick='showUser(this.id)'>" + num_of_pages + "</a>";
-                        }
-                        for (var res in response)
-                        { //for each review
-                            document.getElementById('reviews').innerHTML += "<div class='row review_block'>" +
-                                "<div class='col-md-4centered_text'>" +
-                                "<h3>"+ response[res]['username'] + "</h3>" +
-                                "</div>" +
-                                "<div class='col-md-8'>" +
-                                "<h5>"+ response[res]['rating'] + "/10</h5>" +
-                                "<p>"+ response[res]['comment'] + "</p>" +
-                                "</div>" +
-                                "</div>";
-                            console.log(res, response[res]['username']);
-                        }
-                        // if(response['success']==0)
-                        // {
-                        //     console.log('TI DAUN');
-                        //     return;
-                        // }
-                        // var res = response['results'];
-                        // $.each(res, function(i,val){
-                        //     console.log("WHY");
-                        //     // var newline = '';
-                        //     // newline +='<div>' + val + '</div>';
-                        // })
-                    }
-                })
-            };</script>
+    <script src="scripts/stickyHeader.js"></script>
+    <script src="scripts/jquery-3.6.1.js"></script>
+    <script src="scripts/get_reviews.js"></script>
 </div>
 </body>
 </html>
