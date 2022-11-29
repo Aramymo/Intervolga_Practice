@@ -99,10 +99,6 @@ $app->post('/registration', function (Request $request, Response $response){
 $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
-    if($pdo != null)
-        echo 'aboba';
-    else
-        echo 'amogus';
     $sqlite = new SQLiteQuery($pdo);
     $review_id = (int)$args['id'];
     $result = $sqlite->getReviews($review_id);
@@ -115,13 +111,28 @@ $app->get('/api/feedbacks/page={page}', function (Request $request, Response $re
     $sqlite = new SQLiteQuery($pdo);
     $page = (int)$args['page'];
     $results = $sqlite->getAll($page);
-    //$_SESSION['reviews'] = $result;
+//    $response->getBody()->write($results);
+//    return $response->withHeader('Content-type','application/json');
     $renderer = new PhpRenderer('./templates/');
     return $renderer->render($response,"review_pages.php",["results" => $results]);
 });
 
+//$app->get('/api/feedbacks/', function (Request $request, Response $response, array $args){
+//    $pdo = (new SQLiteConnection())->connect();
+//    $sqlite = new SQLiteQuery($pdo);
+//    $page = $_GET['q'];
+//    $results = $sqlite->getAll($page);
+//    $renderer = new PhpRenderer('./templates/');
+//    return $renderer->render($response,"review_pages.php",["results" => $results]);
+//});
+
 $app->get('/api/add_review/', function (Request $request, Response $response, array $args){
-    header('Content-type: text/html; charset=utf-8');
+    if(!isset($_SESSION['username']))
+    {
+        return $response
+            ->withHeader('Location','/')
+            ->withStatus(302);
+    }
     $renderer = new PhpRenderer('./templates/reviews/');
     return $renderer->render($response,"add_review.php");
 });
@@ -147,7 +158,7 @@ $app->get('/api/delete_review/', function (Request $request, Response $response,
         $renderer = new PhpRenderer('./templates/reviews/');
         $pdo = (new SQLiteConnection())->connect();
         $sqlite = new SQLiteQuery($pdo);
-        $result = $sqlite->getAllWithoutPages();
+        $sqlite->getAllWithoutPages();
         return $renderer->render($response,"delete_review.php");
     }
     else

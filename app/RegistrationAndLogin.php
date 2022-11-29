@@ -24,8 +24,8 @@ class RegistrationAndLogin
     {
         $errors = array();
         if (empty($username)) { array_push($errors, "Введите имя пользователя"); }
-        if (empty($user_email)) { array_push($errors, "Нужна электронная почта"); }
-        if (empty($password1)) { array_push($errors, "Нужен пароль"); }
+        if (empty($user_email)) { array_push($errors, "Введите электронную почту"); }
+        if (empty($password1)) { array_push($errors, "Введите пароль"); }
         if ($password1 != $password2) {
             array_push($errors, "Пароли не совпадают");
         }
@@ -59,8 +59,13 @@ class RegistrationAndLogin
     }
     public function loginUser($username,$password)
     {
+        $_SESSION['username'] = $username;
+        $_SESSION['success'] = "You are now logged in";
+    }
+
+    public function checkLoginData($username, $password)
+    {
         $errors = array();
-        $hash_password = password_hash($password,PASSWORD_DEFAULT, array('cost' => 6));
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE username = :username');
         $stmt->bindParam(':username',$username);
         $stmt->execute();
@@ -73,30 +78,15 @@ class RegistrationAndLogin
                 'password' => $row['password'],
             ];
         }
-        if (password_verify($password, $results[0]['password'])) {
-            $_SESSION['username'] = $username;
-            $_SESSION['success'] = "You are now logged in";
-            header('location: ../home');
-            return true;
-        }else {
-            array_push($errors, "Неправильные имя пользователя или пароль");
-            return false;
-        }
-    }
-
-    public function checkLoginData($username, $password)
-    {
-        $errors = array();
         if (empty($username)) {
-            array_push($errors, "Нужна электронная почта");
+            array_push($errors, "Введите имя пользователя");
         }
         if (empty($password)) {
-            array_push($errors, "Нужен пароль");
+            array_push($errors, "Введите пароль");
+        }
+        if (!password_verify($password, $results[0]['password']) || count($results) ==0) {
+            array_push($errors, "Неправильные имя пользователя или пароль");
         }
         return $errors;
-//        if (count($errors) == 0) {
-//            return true;
-//        }
-//        else return $errors;
     }
 }
