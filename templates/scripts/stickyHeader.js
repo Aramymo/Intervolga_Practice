@@ -1,3 +1,4 @@
+//запускается при прокручивании страницы
 window.onscroll = function() {myFunction()};
 
 var header = document.getElementById("sticky_header");

@@ -12,6 +12,7 @@ class SQLiteAdd
 
     public function addReview($username, $rating, $comment)
     {
+        //Получение даты оставления отзыва
         $review_date = date("Y-m-d");
         $stmt = $this->pdo->prepare('INSERT INTO reviews (username,rating,review_date,comment)
                                      VALUES (:username, :rating, :review_date, :comment);');

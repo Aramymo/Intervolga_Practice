@@ -1,6 +1,8 @@
+//Выполнение функции при загрузке страницы
 document.onload = showUser(1);
 function showUser(str)
 {
+    //Выполнение гет-запроса к контроллеру
     $.ajax({
         url: "http://localhost:8888/api/feedbacks/page="+str,
         type: "GET",
@@ -9,6 +11,7 @@ function showUser(str)
         success: function (response) {
             document.getElementById('reviews').innerHTML = '';
             document.getElementById('pages').innerHTML = '';
+            //отображение страниц, их количество возвращается в response вместе с отзывами
             for (var num_of_pages = 1; num_of_pages < response[0]['number_of_pages'] + 1; num_of_pages++)
             {
                 document.getElementById("pages").innerHTML += "<a id='" + num_of_pages +
@@ -16,6 +19,7 @@ function showUser(str)
             }
             for (var res in response)
             { //for each review
+                //Запись отзывов
                 document.getElementById('reviews').innerHTML += "<div class='row review_block'>" +
                     "<div class='col-md-4centered_text'>" +
                     "<h3>"+ response[res]['username'] + "</h3>" +
@@ -27,9 +31,6 @@ function showUser(str)
                     "</div>";
                 console.log(res, response[res]['username']);
             }
-        },
-        fail: function(){
-            console.log("aboba");
         }
     })
 };

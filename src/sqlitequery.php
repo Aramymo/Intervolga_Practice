@@ -10,14 +10,16 @@ class SQLiteQuery{
 
     public function getReviewById($review_id)
     {
+        //Подготовка запроса к БД
         $stmt = $this->pdo->prepare('SELECT * FROM reviews
                                      WHERE review_id = :review_id;');
-
+        //Защита от инъекций
         $stmt->execute([':review_id' => $review_id]);
-
-        // for storing reviews
+        //Массив для отзыва
         $review = [];
+        //Получение строки
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        //Заполнение массива
         $review[] = [
             'review_id' => $row['review_id'],
             'username' => $row['username'],
@@ -27,13 +29,17 @@ class SQLiteQuery{
         ];
 
         return $review;
-//        return json_encode($reviews,JSON_UNESCAPED_UNICODE);
     }
     public function getAllReviews($page)
     {
+        //Получение количества отзывов
         $number_of_rows = $this->pdo->query('SELECT COUNT(*) FROM reviews')->fetchColumn();
+        //Количество отзывов на странице
         $results_per_page = 20;
+        //Количество страниц, ceil - возвращает округлённую до целого дробь
         $number_of_pages = ceil($number_of_rows/$results_per_page);
+        //Обработка исключений для номера страницы
+        $page = ceil($page);
         if ($page <= 0) {
             $page = 1;
         }
@@ -41,7 +47,9 @@ class SQLiteQuery{
         {
             $page = $number_of_pages;
         }
+        //Получение числа, с которого надо начинать отображать данные
         $page_first_result = ($page-1) * $results_per_page;
+        //Подготовка запроса
         $stmt = $this->pdo->prepare('SELECT * FROM reviews
                                      ORDER BY review_date DESC, review_id DESC LIMIT :page_first_result, :results_per_page;');
         $stmt->execute(array('page_first_result' => $page_first_result, 'results_per_page' => $results_per_page));
