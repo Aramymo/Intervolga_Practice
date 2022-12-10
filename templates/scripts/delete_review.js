@@ -1,7 +1,8 @@
-$("form").submit(function(event){
+function Delete(id){
     var formData ={
-        review_id: $("#review_id").val(),
+        review_id: id,
     };
+    console.log(formData);
     $.ajax({
         url : "http://localhost:8888/api/delete_review/",
         type: "POST",
@@ -14,5 +15,4 @@ $("form").submit(function(event){
             console.log($("#review_id").val());
         }
     });
-    event.preventDefault();
-});
+};

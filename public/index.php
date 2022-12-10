@@ -21,6 +21,7 @@ $config_handle = fopen($path, 'r');
 $text = fread($config_handle,filesize($path));
 $json = json_decode($text, true);
 fclose($config_handle);
+
 $app->add(new BasicAuthentication([
     "path" => ["/api/delete_review/", "/api/delete/"],
     "users" => [
@@ -44,6 +45,7 @@ $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response
     return $response
         ->withHeader('content-type','application/json');
 });
+
 $app->get('/api/feedbacks/page={page}', function (Request $request, Response $response, array $args){
     $pdo = (new SQLiteConnection())->connect();
     $sqlite = new SQLiteQuery($pdo);
@@ -81,8 +83,11 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
 });
 
 $app->get('/api/delete/', function (Request $request, Response $response, array $args){
+    $pdo = (new SQLiteConnection())->connect();
+    $sqlite = new SQLiteQuery($pdo);
+    $reviews = $sqlite->getAllWithoutPages();
     $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"delete_review.php");
+    return $renderer->render($response,"delete_review.php", $reviews);
 });
 
 $app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
