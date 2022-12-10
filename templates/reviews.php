@@ -1,11 +1,11 @@
 <?php
-
+session_start();
 if (!isset($_SESSION['username'])) {
     $_SESSION['msg'] = "You must log in first";
 }
 if (isset($_GET['logout'])) {
-    session_destroy();
     unset($_SESSION['username']);
+    session_destroy();
 }
 ?>
 <!DOCTYPE html>
@@ -19,31 +19,16 @@ if (isset($_GET['logout'])) {
         </style>
     </head>
     <body>
-        <?php  if (isset($_SESSION['username'])) : ?>
-            <div class="div-box popup">
-                <div class="child">
-                    <h2>Welcome to the feedback page, <?php echo $_SESSION['username']?>!</h2>
-                    <h4>Please be free to leave your review!</h4>
-                    <a href="/api/add_review/"><button class="button2"><span>Leave a review</span></button></a>
-                </div>
-                <div>
-                    <p> <a href="/?logout=1"><button class="button1"><span>Logout :c</span></button></a> </p>
-                    <p> <a href="/api/feedbacks/page=1"><button class="button2"><span>Check out reviews</span></button></a> </p>
-                </div>
+        <div class="div-box popup">
+            <div class="child">
+                <h2>Добро пожаловать на страницу отзывов!</h2>
+                <h4>Здесь Вы можете оставить свой отзыв или посмотреть отзывы других пользователей!</h4>
             </div>
-        <?php endif ?>
-        <?php  if (!isset($_SESSION['username'])) : ?>
-            <div class="div-box popup">
-                <div class="child">
-                    <h2>Welcome to the feedback page!</h2>
-                    <h4>Seems like you have not log in yet!</h4>
-                    <h6>You have to be logged in to leave a review but you can see reviews of others.</h6>
-                </div>
-                <div>
-                    <p> <a href="/login"><button class="button1"><span>Login</span></button></a> </p>
-                    <p> <a href="/api/feedbacks/page=1"><button class="button2"><span>Check out reviews</span></button></a> </p>
-                </div>
+            <div>
+<!--                    <p> <a href="regandlog/login.php"><button class="button1"><span>Login</span></button></a> </p>-->
+                <p> <a href="/add/"><button class="button1" ><span>Написать отзыв</span></button></a>
+                <p> <a href="/api/feedbacks/"><button class="button2"><span>Посмотреть отзывы</span></button></a> </p>
             </div>
-        <?php endif ?>
+        </div>
     </body>
 </html>

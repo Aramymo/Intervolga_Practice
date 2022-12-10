@@ -1,15 +1,3 @@
-<?php
-
-if (!isset($_SESSION['username'])) {
-    $_SESSION['msg'] = "You must log in first";
-}
-if (isset($_GET['logout'])) {
-    session_destroy();
-    unset($_SESSION['username']);
-}
-$json_data = $results;
-$reviews = json_decode($json_data,true);
-?>
 <!DOCTYPE html>
 <html lang="ru-en">
 <head>
@@ -22,48 +10,24 @@ $reviews = json_decode($json_data,true);
 </head>
 <body>
 <div class="sticky-header" id="sticky_header">
-    <a href="/" class="home_button">Go Home</a>
-    <div>
-        <ul id="navlist">
-            <li class="nav-li"><?php if(!isset($_SESSION['username'])){?><a href="/login"><button class="btn">Log in</button></a><?php }else{ echo $_SESSION['username'];}?></li>
-        </ul>
-    </div>
+    <a href="/" class="home_button">На главную</a>
 </div>
 <br>
-<button value="1" onclick="showUser(this.value)">CALL AJAX</button>
-<button value="2" onclick="showUser(this.value)">CALL AJAX</button>
-<div id="txtHint"><b>Person info will be listed here...</b></div>
-<div class="centered_text">
-<?php //for($page = 1; $page <= $_SESSION['pages'];$page++){ ?>
-<!--    <a value="--><?php //echo $page ?><!--" class="page_link" onclick="showReviews(this.value)">--><?php //echo $page ?><!--</a>-->
-<?php //} ?>
-    <?php for($page = 1; $page <= $_SESSION['pages'];$page++){ ?>
-        <a href="page=<?php echo $page ?>" class="page_link"><?php echo $page ?></a>
-    <?php } ?>
+<div id = 'pages' class = "centered_text">
 </div>
-<div id = "aboba">
+<div id = "reviews"">
 
 </div>
-<?php foreach ($reviews as $review) : ?>
-    <div class="row review_block">
-        <div class="col-md-4centered_text">
-            <h3><?php echo $review['username']?></h3>
-        </div>
-        <div class="col-md-8">
-            <h5><?php echo $review['rating']?>/10</h5>
-            <p><?php echo $review['comment']?></p>
-        </div>
-    </div>
-<!--<button value="2" onclick="showUser(this.value)">CALL AJAX</button>-->
-<?php endforeach ?>
+<!--data-->
 </div>
 <div class="centered_text">
-    <?php for($page = 1; $page <= $_SESSION['pages'];$page++){ ?>
-        <a href="page=<?php echo $page ?>" class="page_link"><?php echo $page ?></a>
-    <?php } ?>
-    <script> <?php include"scripts/stickyHeader.js"?></script>
-    <script> <?php include "scripts/jquery-3.6.1.js"?></script>
-    <script><?php include"scripts/get_reviews.js"?></script>
+<!--    pages-->
+<!--    <script src="scripts/stickyHeader.js"></script>-->
+    <script> <?php include('scripts/stickyHeader.js')?></script>
+    <script> <?php include('scripts/jquery-3.6.1.js')?></script>
+    <script> <?php include('scripts/get_reviews.js')?></script>
+<!--    <script src="scripts/jquery-3.6.1.js"></script>-->
+<!--    <script src="scripts/get_reviews.js"></script>-->
 </div>
 </body>
 </html>

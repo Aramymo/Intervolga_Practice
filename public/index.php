@@ -6,7 +6,6 @@ use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 use App\SQLiteConnection;
 use App\SQLiteQuery;
-use App\RegistrationAndLogin;
 use App\Config;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -20,65 +19,14 @@ $app->get('/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates');
     return $renderer->render($response,"reviews.php");
 });
-$app->post('/login', function (Request $request, Response $response){
-    $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new RegistrationAndLogin($pdo);
-    $data = $request->getParsedBody();
-    $username = $data['username'];
-    $password = $data['password'];
-    $errors = $sqlite->checkLoginData($username,$password);
-    if(count($errors) == 0)
-    {
-        $sqlite->loginUser($username,$password);
-        $response->getBody()->write(json_encode($errors));
-//        $_SESSION['username'] = $username;
-        return $response
-            ->withHeader("Access-Control-Allow-Origin",'*')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
-    }
-    else
-    {
-        $response->getBody()->write(json_encode($errors));
-        return $response
-            ->withHeader("Access-Control-Allow-Origin",'*')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
-    }
-});
-$app->post('/registration', function (Request $request, Response $response){
-    //header('Content-type: application/json; charset=utf-8');
-    $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new RegistrationAndLogin($pdo);
-    $data = $request->getParsedBody();
-    $username = $data['username'];
-    $user_email = $data['user_email'];
-    $password1 = $data['password1'];
-    $password2 = $data['password2'];
-    $errors = $sqlite->checkRegistrationData($username,$user_email,$password1,$password2);
-    if(count($errors) == 0)
-    {
-        $sqlite->registerUser($username,$user_email,$password1);
-        $sqlite->loginUser($username,$password1);
-//        $_SESSION['username'] = $username;
-        $response->getBody()->write(json_encode($errors));
-        return $response
-            ->withHeader("Access-Control-Allow-Origin",'*')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
-    }
-    else
-    {
-        $response->getBody()->write(json_encode($errors));
-        return $response
-            ->withHeader("Access-Control-Allow-Origin",'*')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
-    }
-});
 
 $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
     $sqlite = new SQLiteQuery($pdo);
     $review_id = (int)$args['id'];
-    $result = $sqlite->getReviews($review_id);
+    $result = $sqlite->getReviewById($review_id);
+    $result = json_encode($result,JSON_UNESCAPED_UNICODE);
     $response->getBody()->write($result);
     return $response
         ->withHeader('content-type','application/json');
@@ -87,19 +35,20 @@ $app->get('/api/feedbacks/page={page}', function (Request $request, Response $re
     $pdo = (new SQLiteConnection())->connect();
     $sqlite = new SQLiteQuery($pdo);
     $page = (int)$args['page'];
-    $results = $sqlite->getAll($page);
+    $results = $sqlite->getAllReviews($page);
+    $results = json_encode($results,JSON_UNESCAPED_UNICODE);
     $response->getBody()->write($results);
-    return $response->withHeader("Access-Control-Allow-Origin",'*');
-//    $renderer = new PhpRenderer('./templates/');
-//    return $renderer->render($response,"review_pages.php",["results" => $results]);
+   return $response->withHeader("Access-Control-Allow-Origin",'*');
 });
 
 $app->get('/api/feedbacks/', function (Request $request, Response $response, array $args){
-    $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new SQLiteQuery($pdo);
-    $results = $sqlite->getAll(1);
-    $response->getBody()->write($results);
-    return $response->withHeader("Access-Control-Allow-Origin",'*');
+    $renderer = new PhpRenderer('./templates/');
+    return $renderer->render($response,"review_pages.php");
+});
+
+$app->get('/add/', function (Request $request, Response $response, array $args){
+    $renderer = new PhpRenderer('./templates/reviews/');
+    return $renderer->render($response,"add_review.php");
 });
 
 $app->post('/api/add_review/', function (Request $request, Response $response, array $args){
@@ -110,7 +59,9 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
     $username = $data['username'];
     $rating = $data['rating'];
     $comment = $data['comment'];
-    $response->getbody()->write($sqlite->addReview($username, $rating, $comment));
+    $result = $sqlite->addReview($username, $rating, $comment);
+    $result = json_encode($result,JSON_UNESCAPED_UNICODE);
+    $response->getbody()->write($result);
     return $response
         ->withHeader("Access-Control-Allow-Origin",'*')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST');

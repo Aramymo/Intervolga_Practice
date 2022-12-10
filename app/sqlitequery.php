@@ -8,7 +8,7 @@ class SQLiteQuery{
         $this->pdo = $pdo;
     }
 
-    public function getReviews($review_id)
+    public function getReviewById($review_id)
     {
         $stmt = $this->pdo->prepare('SELECT * FROM reviews
                                      WHERE review_id = :review_id;');
@@ -16,23 +16,22 @@ class SQLiteQuery{
         $stmt->execute([':review_id' => $review_id]);
 
         // for storing reviews
-        $reviews = [];
+        $review = [];
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $review[] = [
+            'review_id' => $row['review_id'],
+            'username' => $row['username'],
+            'rating' => $row['rating'],
+            'review_date' => $row['review_date'],
+            'comment' => $row['comment'],
+        ];
 
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $reviews[] = [
-                'review_id' => $row['review_id'],
-                'username' => $row['username'],
-                'rating' => $row['rating'],
-                'review_date' => $row['review_date'],
-                'comment' => $row['comment'],
-            ];
-        }
-
-        return json_encode($reviews,JSON_UNESCAPED_UNICODE);
+        return $review;
+//        return json_encode($reviews,JSON_UNESCAPED_UNICODE);
     }
-    public function getAll($page)
+    public function getAllReviews($page)
     {
-        $number_of_rows = $this->pdo->query('select count(*) from reviews')->fetchColumn();
+        $number_of_rows = $this->pdo->query('SELECT COUNT(*) FROM reviews')->fetchColumn();
         $results_per_page = 20;
         $number_of_pages = ceil($number_of_rows/$results_per_page);
         if ($page <= 0) {
@@ -44,11 +43,8 @@ class SQLiteQuery{
         }
         $page_first_result = ($page-1) * $results_per_page;
         $stmt = $this->pdo->prepare('SELECT * FROM reviews
-                                     ORDER BY review_date DESC LIMIT :page_first_result, :results_per_page;');
-//        $stmt = $this->pdo->prepare('SELECT * FROM reviews
-//                                     ORDER BY review_date DESC;');
+                                     ORDER BY review_date DESC, review_id DESC LIMIT :page_first_result, :results_per_page;');
         $stmt->execute(array('page_first_result' => $page_first_result, 'results_per_page' => $results_per_page));
-        //$stmt->execute();
         // for storing reviews
         $reviews = [];
 
@@ -62,7 +58,7 @@ class SQLiteQuery{
                 'number_of_pages' => $number_of_pages,
             ];
         }
-        return json_encode($reviews,JSON_UNESCAPED_UNICODE);
+        return $reviews;
     }
     public function addReview($username, $rating, $comment)
     {
@@ -74,7 +70,7 @@ class SQLiteQuery{
         $stmt->bindParam(':review_date', $review_date);
         $stmt->bindParam(':comment', $comment);
         $result = $stmt->execute();
-        return json_encode($result);
+        return $result;
     }
 //CoolTesterGuy
 //I'm THE CoolTesterGuy and I am here to test.
@@ -83,7 +79,7 @@ class SQLiteQuery{
         $stmt = $this->pdo->prepare('DELETE FROM reviews WHERE review_id = :review_id;');
         $stmt->bindParam(':review_id', $id);
         $result = $stmt->execute();
-        return json_encode($result);
+        return $result;
     }
     public function getAllWithoutPages()
     {

@@ -1,113 +1,35 @@
-// console.log("TESTING");
-// $(document).ready(function() {
-//     $('.page_link').on('click', function (e) {
-//
-//         //Отменяем стандартное поведение ссылок
-//         e.preventDefault();
-//
-//         //Получаем значение ссылки
-//         let page = $(this).attr('href');
-//
-//         // При клике на кнопку назад, добавляем класс "active" текущей ссылке
-//         // $(this).closest('ul').find('li').removeClass('active');
-//         // $(this).parent().addClass('active');
-//
-//         // Выполняем ajax запрос
-//         $.ajax({
-//             url: '/api/feedbacks/page',
-//             type: 'POST',
-//             success: function () {
-//                 //$('.note').html(data);
-//                 console.log('aboba');
-//             },
-//             error: function (){
-//                 console.log('akfoakfoaskfokf');
-//             }
-//         });
-//     });
-// });
-// $.ajax({
-//     url: "api/feedbacks/page=1",
-//     type: "POST",
-//     cache: false,
-//     success: function(data){
-//         alert(data);
-//         $().html(data);
-//     }
-// });
-
-// $(document).ready(function(){
-//
-// })
-// function showReviews(str) {
-//     if (str == "") {
-//         //document.getElementById("txtHint").innerHTML = "";
-//         return;
-//     } else {
-//         var xmlhttp = new XMLHttpRequest();
-//         xmlhttp.onreadystatechange = function() {
-//             if (this.readyState == 4 && this.status == 200) {
-//                 document.getElementById("aboba").innerHTML = this.responseText;
-//             }
-//         };
-//         xmlhttp.open("GET","/api/feedbacks/page="+str,true);
-//         xmlhttp.send();
-//     }
-// }
-
-// $.ajax({
-//     url: "/api/feedbacks/page=1",
-//     type: "GET",
-//     cache: false,
-//     success: function (data) {
-//         alert("done");
-//         console.log('aboba');
-//         $().html(data);
-//     }
-// })
-
-// $(document).ready(function(){
-//     console.log("aksmflaksf");
-//         $.ajax({
-//         url: "/api/feedbacks/page=1",
-//         type: "GET",
-//         context: document.body,
-//         cache: false,
-//         success: function (data) {
-//             alert("done");
-//             console.log('aboba');
-//             $().html(data);
-//         }
-//     })
-//     // console.log()
-//     // var xmlhttp = new XMLHttpRequest();
-//     // xmlhttp.open("GET","/api/feedbacks/page="+str,true);
-//     // xmlhttp.send();
-//     // console.log(this.response);
-// });
-function showUser(str) {
+document.onload = showUser(1);
+function showUser(str)
+{
     $.ajax({
-        url: "/api/feedbacks/page=1",
+        url: "http://localhost:8888/api/feedbacks/page="+str,
         type: "GET",
-        context: document.body,
+        dataType: "json",
         cache: false,
-        success: function (data) {
-            console.log(document.body);
+        success: function (response) {
+            document.getElementById('reviews').innerHTML = '';
+            document.getElementById('pages').innerHTML = '';
+            for (var num_of_pages = 1; num_of_pages < response[0]['number_of_pages'] + 1; num_of_pages++)
+            {
+                document.getElementById("pages").innerHTML += "<a id='" + num_of_pages +
+                    "' class = 'page_link' onclick='showUser(this.id)'>" + num_of_pages + "</a>";
+            }
+            for (var res in response)
+            { //for each review
+                document.getElementById('reviews').innerHTML += "<div class='row review_block'>" +
+                    "<div class='col-md-4centered_text'>" +
+                    "<h3>"+ response[res]['username'] + "</h3>" +
+                    "</div>" +
+                    "<div class='col-md-8'>" +
+                    "<h5>"+ response[res]['rating'] + "/10</h5>" +
+                    "<p>"+ response[res]['comment'] + "</p>" +
+                    "</div>" +
+                    "</div>";
+                console.log(res, response[res]['username']);
+            }
+        },
+        fail: function(){
+            console.log("aboba");
         }
-    });
-    // if (str == "") {
-    //     document.getElementById("txtHint").innerHTML = "";
-    //     console.log(this.response);
-    //     return;
-    // } else {
-    //     var xmlhttp = new XMLHttpRequest();
-    //     xmlhttp.onreadystatechange = function() {
-    //         if (this.readyState == 4 && this.status == 200) {
-    //             document.getElementById("aboba").innerHTML = this.response;
-    //             console.log(this.response);
-    //         }
-    //     };
-    //     xmlhttp.open("GET","/api/feedbacks/page="+str,true);
-    //     xmlhttp.send();
-    // }
-}
+    })
+};

@@ -16,6 +16,21 @@
     list-style-type: square;
     padding-right: 20px;
 }
+
+.review_send_status_success{
+    background-color: limegreen;
+}
+
+.review_send_status_error{
+    background-color: red;
+}
+.review_send_status_success, .review_send_status_error{
+    border: none;
+    border-radius: 8px;
+    width: 70%;
+    margin: auto;
+}
+
 .home_button{
     text-decoration: none;
     color: white;
@@ -66,7 +81,7 @@
 }
 
 .button1 {
-    width: 150px;
+    width: 230px;
 }
 
 .button2 {
