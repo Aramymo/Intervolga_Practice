@@ -1,13 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['username'])) {
-    $_SESSION['msg'] = "You must log in first";
-}
-if (isset($_GET['logout'])) {
-    unset($_SESSION['username']);
-    session_destroy();
-}
-?>
 <!DOCTYPE html>
 <html lang="ru-en">
     <head>
@@ -19,6 +9,13 @@ if (isset($_GET['logout'])) {
         </style>
     </head>
     <body>
+    <?php
+    $path = __DIR__ . '/../config/config.json';
+    $config_handle = fopen($path, 'r');
+    $text = fread($config_handle,filesize($path));
+    $json = json_decode($text, true);
+    fclose($config_handle);
+    ?>
         <div class="div-box popup">
             <div class="child">
                 <h2>Добро пожаловать на страницу отзывов!</h2>

@@ -1,13 +1,13 @@
 <?php
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-//use Psr\Http\Server\RequestHandlerInterface as RequestInterface;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 use App\SQLiteConnection;
 use App\SQLiteQuery;
+use App\SQLiteAdd;
+use App\SQLiteDelete;
 use Tuupola\Middleware\HttpBasicAuthentication as BasicAuthentication;
-use App\Config;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -16,10 +16,15 @@ $app->addErrorMiddleware(true,true,false);
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
+$path = __DIR__ . '/../config/config.json';
+$config_handle = fopen($path, 'r');
+$text = fread($config_handle,filesize($path));
+$json = json_decode($text, true);
+fclose($config_handle);
 $app->add(new BasicAuthentication([
     "path" => ["/api/delete_review/", "/api/delete/"],
     "users" => [
-        "admin" => "admin"
+        $json['Admin_Login'] => $json['Admin_Password']
     ]
 ]));
 
@@ -62,7 +67,7 @@ $app->get('/add/', function (Request $request, Response $response, array $args){
 $app->post('/api/add_review/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new SQLiteQuery($pdo);
+    $sqlite = new SQLiteAdd($pdo);
     $data = $request->getParsedBody();
     $username = $data['username'];
     $rating = $data['rating'];
@@ -82,7 +87,7 @@ $app->get('/api/delete/', function (Request $request, Response $response, array 
 
 $app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
     $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new SQLiteQuery($pdo);
+    $sqlite = new SQLiteDelete($pdo);
     $data = $request->getParsedBody();
     $review_id = $data['review_id'];
     $sqlite->deleteReview($review_id);

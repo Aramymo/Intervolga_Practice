@@ -19,5 +19,5 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Fig\\Http\\Message\\' => array($vendorDir . '/fig/http-message-util/src'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
-    'App\\' => array($baseDir . '/app'),
+    'App\\' => array($baseDir . '/src'),
 );

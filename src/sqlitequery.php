@@ -60,47 +60,11 @@ class SQLiteQuery{
         }
         return $reviews;
     }
-    public function addReview($username, $rating, $comment)
-    {
-        $review_date = date("Y-m-d");
-        $stmt = $this->pdo->prepare('INSERT INTO reviews (username,rating,review_date,comment)
-                                     VALUES (:username, :rating, :review_date, :comment);');
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':rating', $rating);
-        $stmt->bindParam(':review_date', $review_date);
-        $stmt->bindParam(':comment', $comment);
-        $result = $stmt->execute();
-        return $result;
-    }
-//CoolTesterGuy
-//I'm THE CoolTesterGuy and I am here to test.
-    public function deleteReview($id)
-    {
-        $stmt = $this->pdo->prepare('DELETE FROM reviews WHERE review_id = :review_id;');
-        $stmt->bindParam(':review_id', $id);
-        $result = $stmt->execute();
-        return $result;
-    }
     public function getAllWithoutPages()
     {
         $stmt = $this->pdo->prepare('SELECT * FROM reviews ORDER BY review_date DESC, review_id DESC;');
-//        $stmt = $this->pdo->prepare('SELECT * FROM reviews
-//                                     ORDER BY review_date DESC;');
         $stmt->execute();
-        //$stmt->execute();
-        // for storing reviews
         $result = $stmt->fetchAll();
-//        $reviews = [];
-//
-//        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-//            $reviews[] = [
-//                'review_id' => $row['review_id'],
-//                'username' => $row['username'],
-//                'rating' => $row['rating'],
-//                'review_date' => $row['review_date'],
-//                'comment' => $row['comment'],
-//            ];
-//        }
         return $result;
     }
 }
