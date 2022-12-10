@@ -1,13 +1,3 @@
-<?php
-
-if (!isset($_SESSION['username'])) {
-    $_SESSION['msg'] = "You must log in first";
-}
-if (isset($_GET['logout'])) {
-    session_destroy();
-    unset($_SESSION['username']);
-}
-?>
 <!DOCTYPE html>
 <html lang="ru-en">
 <head>
@@ -24,10 +14,10 @@ if (isset($_GET['logout'])) {
 
     foreach ($reviews as $review):
     ?>
-    <form method="POST" action="/api/delete_review/">
+    <form method="POST" action="/api/delete/">
         <div>
             <label>Review_id:</label>
-            <input type="text" name="review_id" value="<?php echo $review[0] ?>" readonly>
+            <input type="text" name="review_id" value="<?php echo $review[0] ?>" id = "review_id" readonly>
         </div>
         <div>
             <tr>
@@ -41,5 +31,7 @@ if (isset($_GET['logout'])) {
     </form>
     <?php endforeach; ?>
 </div>
+<script> <?php include __DIR__ . '/../scripts/jquery-3.6.1.js'?></script>
+<script> <?php include __DIR__ . '/../scripts/delete_review.js'?></script>
 </body>
 </html>

@@ -83,24 +83,24 @@ class SQLiteQuery{
     }
     public function getAllWithoutPages()
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM reviews ORDER BY review_date DESC;');
+        $stmt = $this->pdo->prepare('SELECT * FROM reviews ORDER BY review_date DESC, review_id DESC;');
 //        $stmt = $this->pdo->prepare('SELECT * FROM reviews
 //                                     ORDER BY review_date DESC;');
         $stmt->execute();
         //$stmt->execute();
         // for storing reviews
-        $aboba = $stmt->fetchAll();
-        $reviews = [];
-
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $reviews[] = [
-                'review_id' => $row['review_id'],
-                'username' => $row['username'],
-                'rating' => $row['rating'],
-                'review_date' => $row['review_date'],
-                'comment' => $row['comment'],
-            ];
-        }
-        return $aboba;
+        $result = $stmt->fetchAll();
+//        $reviews = [];
+//
+//        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+//            $reviews[] = [
+//                'review_id' => $row['review_id'],
+//                'username' => $row['username'],
+//                'rating' => $row['rating'],
+//                'review_date' => $row['review_date'],
+//                'comment' => $row['comment'],
+//            ];
+//        }
+        return $result;
     }
 }

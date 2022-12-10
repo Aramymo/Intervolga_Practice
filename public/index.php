@@ -6,6 +6,7 @@ use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 use App\SQLiteConnection;
 use App\SQLiteQuery;
+use Tuupola\Middleware\HttpBasicAuthentication as BasicAuthentication;
 use App\Config;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -14,6 +15,13 @@ $app = AppFactory::create();
 $app->addErrorMiddleware(true,true,false);
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
+
+$app->add(new BasicAuthentication([
+    "path" => ["/api/delete_review/", "/api/delete/"],
+    "users" => [
+        "admin" => "admin"
+    ]
+]));
 
 $app->get('/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates');
@@ -67,35 +75,20 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
 });
 
-$app->get('/api/delete_review/', function (Request $request, Response $response, array $args){
-    header('Content-type: text/html; charset=utf-8');
-//    if(isset($_SESSION['username']) && $_SESSION['username'] == Config::ADMIN_LOGIN)
-//    {
-//        $renderer = new PhpRenderer('./templates/reviews/');
-//        $pdo = (new SQLiteConnection())->connect();
-//        $sqlite = new SQLiteQuery($pdo);
-//        $sqlite->getAllWithoutPages();
-//        return $renderer->render($response,"delete_review.php");
-//    }
-    //else
-    //{
-        return $response
-            ->withStatus(404);
-    //}
+$app->get('/api/delete/', function (Request $request, Response $response, array $args){
+    $renderer = new PhpRenderer('./templates/reviews/');
+    return $renderer->render($response,"delete_review.php");
 });
+
 $app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
-    header('Content-type: application/json; charset=utf-8');
     $pdo = (new SQLiteConnection())->connect();
     $sqlite = new SQLiteQuery($pdo);
-    $result = $sqlite->getAllWithoutPages();
     $data = $request->getParsedBody();
     $review_id = $data['review_id'];
-//    $review_id = (int)$args['id'];
-//    echo "$review_id";
     $sqlite->deleteReview($review_id);
     return $response
-        ->withHeader('Location', '/api/delete_review/')
-        ->withStatus(302);
+        ->withHeader("Access-Control-Allow-Origin",'*')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
 });
 
 $app->run();
