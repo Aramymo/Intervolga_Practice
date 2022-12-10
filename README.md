@@ -1,18 +1,22 @@
 # Intervolga_Practice
-Page with reviews
+Страница с отзывами.
 
-This is my project for practice in Intervolga. Im trying to create a page with different reviews.
+Это мой проект для учебной практики в Интерволге.
 
-Things I use: html,css,js,php,slim,composer, php-view.
+Использую: html, css, js, jQuery, php, slim-4, php-view, Tuupola Basic Authentication
 
-Проблемы, о которых известно на данный момент:
--Не работает создание сессии(трудности с созданием сессии на стороне пользователя после выполнения ajax логина)
--Из-за того, что не работают сессии ограничение доступа на страницу удаления тоже, соответственно, сломалась(раньше работало)
--Возможно, на некоторых страницах нет вёрстки
--Половина сайта на русском, половина - на английском(как и этот файл)
-
-Тестовый сервер создавался через
+Запуск сервера: 
 
 php -S localhost:8888 -t public public/index.php
 
-Фронт-енд сервер создавался из папки frontend
+======================================================================================
+
+Page with reviews.
+
+This is my project for practice in Intervolga.
+
+Thing I use: html, css, js, jQuery, php, slim-4, php-view, Tuupola Basic Authentication
+
+To start server please use:
+
+php -S localhost:8888 -t public public/index.php
