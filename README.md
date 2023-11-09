@@ -15,7 +15,7 @@ Page with reviews.
 
 This is my project for practice in Intervolga.
 
-Thing I use: html, css, js, jQuery, php, slim-4, php-view, Tuupola Basic Authentication
+Things I use: html, css, js, jQuery, php, slim-4, php-view, Tuupola Basic Authentication
 
 To start server please use:
 
