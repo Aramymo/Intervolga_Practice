@@ -3,6 +3,19 @@
 
 Это мой проект для учебной практики в Интерволге.
 
+Для работы необходимо создать папку config с файлом config.json внутри.
+
+В config.json должны содержаться следующие поля:
+{
+
+  "Admin_Login": "Your_Cool_Login",
+  
+  "Admin_Password": "Your_Cool_Password",
+  
+  "DB_Path": "db/Reviews.db"
+  
+}
+
 Имеющиеся ендпоинты можно посмотреть в файле index.php, страница работает(по крайней мере очень старается) по MVC.
 ![IV](https://github.com/Aramymo/Intervolga_Practice/assets/84283648/2e061181-3a0e-4621-b72a-d7bce4340ef0)
 
