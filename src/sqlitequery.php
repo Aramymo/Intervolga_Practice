@@ -1,17 +1,13 @@
 <?php
 namespace App;
+use App\SQLiteConnection;
 
 class SQLiteQuery{
-    private $pdo;
-    public function __construct($pdo)
-    {
-        $this->pdo = $pdo;
-    }
 
     public function getReviewById($review_id)
     {
         //Подготовка запроса к БД
-        $stmt = $this->pdo->prepare('SELECT * FROM reviews
+        $stmt = SQLiteConnection::prepare('SELECT * FROM reviews
                                      WHERE review_id = :review_id;');
         //Защита от инъекций
         $stmt->execute([':review_id' => $review_id]);
@@ -33,7 +29,9 @@ class SQLiteQuery{
     public function getAllReviews($page)
     {
         //Получение количества отзывов
-        $number_of_rows = $this->pdo->query('SELECT COUNT(*) FROM reviews')->fetchColumn();
+        $stmt = SQLiteConnection::prepare('SELECT COUNT(*) FROM reviews');
+        $stmt->execute();
+        $number_of_rows=$stmt->fetchColumn();
         //Количество отзывов на странице
         $results_per_page = 20;
         //Количество страниц, ceil - возвращает округлённую до целого дробь
@@ -50,7 +48,7 @@ class SQLiteQuery{
         //Получение числа, с которого надо начинать отображать данные
         $page_first_result = ($page-1) * $results_per_page;
         //Подготовка запроса
-        $stmt = $this->pdo->prepare('SELECT * FROM reviews
+        $stmt = SQLiteConnection::prepare('SELECT * FROM reviews
                                      ORDER BY review_date DESC, review_id DESC LIMIT :page_first_result, :results_per_page;');
         $stmt->execute(array('page_first_result' => $page_first_result, 'results_per_page' => $results_per_page));
         // for storing reviews
@@ -70,7 +68,7 @@ class SQLiteQuery{
     }
     public function getAllWithoutPages()
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM reviews ORDER BY review_date DESC, review_id DESC;');
+        $stmt = SQLiteConnection::prepare('SELECT * FROM reviews ORDER BY review_date DESC, review_id DESC;');
         $stmt->execute();
         $result = $stmt->fetchAll();
         return $result;

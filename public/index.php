@@ -3,7 +3,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
-use App\SQLiteConnection;
 use App\SQLiteQuery;
 use App\SQLiteAdd;
 use App\SQLiteDelete;
@@ -45,7 +44,7 @@ $app->get('/', function (Request $request, Response $response){
 });
 
 //Контроллер страницы отзывов, просто отображает страницу
-$app->get('/api/feedbacks/', function (Request $request, Response $response, array $args){
+$app->get('/feedbacks/', function (Request $request, Response $response, array $args){
     $renderer = new PhpRenderer('./templates/');
     return $renderer->render($response,"review_pages.php");
 });
@@ -53,10 +52,8 @@ $app->get('/api/feedbacks/', function (Request $request, Response $response, arr
 //Контроллер для получения определённого отзыва
 $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
-    // Подключение к БД
-    $pdo = (new SQLiteConnection())->connect();
     // Создание объекта класса выборки
-    $sqlite = new SQLiteQuery($pdo);
+    $sqlite = new SQLiteQuery();
     // Получение айди отзыва
     $review_id = (int)$args['id'];
     // Вызов метода, который возвращает содержание отзыва
@@ -71,8 +68,8 @@ $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response
 
 //Контроллер для получения всех отзывов с постраничным отображением
 $app->get('/api/feedbacks/page={page}', function (Request $request, Response $response, array $args){
-    $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new SQLiteQuery($pdo);
+    //
+    $sqlite = new SQLiteQuery();
     //получение номера страницы
     $page = (int)$args['page'];
     //получение всех отзывов с этой страницы
@@ -91,9 +88,9 @@ $app->get('/add/', function (Request $request, Response $response, array $args){
 //Контроллер для добавления отзыва
 $app->post('/api/add_review/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
-    $pdo = (new SQLiteConnection())->connect();
+    
     //Создание объекта класса добавления
-    $sqlite = new SQLiteAdd($pdo);
+    $sqlite = new SQLiteAdd();
     //Получение данных из пост-запроса
     $data = $request->getParsedBody();
     $username = $data['username'];
@@ -110,8 +107,8 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
 
 //Контроллер отображения страницы удаления отзывов, просто отображает страницу
 $app->get('/api/delete/', function (Request $request, Response $response, array $args){
-    $pdo = (new SQLiteConnection())->connect();
-    $sqlite = new SQLiteQuery($pdo);
+    
+    $sqlite = new SQLiteQuery();
     //Получение всех отзывов, без разделения на страницы
     $reviews = $sqlite->getAllWithoutPages();
     $renderer = new PhpRenderer('./templates/reviews/');
@@ -120,9 +117,9 @@ $app->get('/api/delete/', function (Request $request, Response $response, array 
 
 //Контроллер удаления отзыва
 $app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
-    $pdo = (new SQLiteConnection())->connect();
+    
     //Создание объекта удаления отзыва
-    $sqlite = new SQLiteDelete($pdo);
+    $sqlite = new SQLiteDelete();
     $data = $request->getParsedBody();
     $review_id = $data['review_id'];
     //Удаление отзыва из БД
