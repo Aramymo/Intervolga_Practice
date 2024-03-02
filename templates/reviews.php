@@ -24,7 +24,7 @@
             <div>
 <!--                    <p> <a href="regandlog/login.php"><button class="button1"><span>Login</span></button></a> </p>-->
                 <p> <a href="/add/"><button class="button1" ><span>Написать отзыв</span></button></a>
-                <p> <a href="/api/feedbacks/"><button class="button2"><span>Посмотреть отзывы</span></button></a> </p>
+                <p> <a href="/feedbacks/"><button class="button2"><span>Посмотреть отзывы</span></button></a> </p>
             </div>
         </div>
     </body>

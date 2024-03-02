@@ -7,6 +7,7 @@ namespace App;
 class SQLiteConnection {
     private static $instance = null;
     private $connection = null;
+
     protected function __construct()
     {
         //Открытие конфиг.файла для получения пути к БД
@@ -20,20 +21,27 @@ class SQLiteConnection {
             $this->connection = new \PDO("sqlite:" . $json['DB_Path']);
         }
     }
+
     public static function getInstance(): SQLiteConnection
     {
+        //Проверка наличия подключения
         if (null === self::$instance)
         {
+            //Создание объекта, если подключения нет
             self::$instance = new static();
         }
         return self::$instance;
     }
+
     public static function connect(): \PDO
     {
+        //Проверка подключения
         return static::getInstance()->connection;
     }
+
     public static function prepare($statement): \PDOStatement
     {
+        //Подготовка запроса
         return static::connect()->prepare($statement);
     }
 }

@@ -5,12 +5,6 @@ use App\SQLiteConnection;
 
 class SQLiteAdd
 {
-    private $pdo;
-    // public function __construct($pdo)
-    // {
-    //     $this->pdo = $pdo;
-    // }
-
     public function addReview($username, $rating, $comment)
     {
         //Получение даты оставления отзыва

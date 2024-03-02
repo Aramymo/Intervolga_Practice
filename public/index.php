@@ -31,25 +31,41 @@ $app->add(new BasicAuthentication([
     ]
 ]));
 
-//Hello world контроллер, просто выводит надпись
+//Hello world ендпоинт
 $app->get('/hello', function(Request $request, Response $response){
    $response->getBody()->write("Hello World!");
    return $response;
 });
 
-//Контроллер домашней страницы, просто отображает страницу
+//Ендпоинт отображения домашней страницы
 $app->get('/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates');
     return $renderer->render($response,"reviews.php");
 });
 
-//Контроллер страницы отзывов, просто отображает страницу
+//Ендпоинт отображения страницы отзывов
 $app->get('/feedbacks/', function (Request $request, Response $response, array $args){
     $renderer = new PhpRenderer('./templates/');
     return $renderer->render($response,"review_pages.php");
 });
 
-//Контроллер для получения определённого отзыва
+//Ендпоинт отображения страницы добавления отзыва
+$app->get('/add/', function (Request $request, Response $response, array $args){
+    $renderer = new PhpRenderer('./templates/reviews/');
+    return $renderer->render($response,"add_review.php");
+});
+
+//Ендпоинт отображения страницы удаления отзывов
+$app->get('/delete/', function (Request $request, Response $response, array $args){
+    
+    $sqlite = new SQLiteQuery();
+    //Получение всех отзывов, без разделения на страницы
+    $reviews = $sqlite->getAllWithoutPages();
+    $renderer = new PhpRenderer('./templates/reviews/');
+    return $renderer->render($response,"delete_review.php", $reviews);
+});
+
+//Ендпоинт для получения определённого отзыва
 $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     // Создание объекта класса выборки
@@ -66,7 +82,7 @@ $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response
         ->withHeader('content-type','application/json');
 });
 
-//Контроллер для получения всех отзывов с постраничным отображением
+//Ендпоинт для получения всех отзывов с постраничным отображением
 $app->get('/api/feedbacks/page={page}', function (Request $request, Response $response, array $args){
     //
     $sqlite = new SQLiteQuery();
@@ -79,13 +95,8 @@ $app->get('/api/feedbacks/page={page}', function (Request $request, Response $re
    return $response->withHeader("Access-Control-Allow-Origin",'*');
 });
 
-//Контроллер страницы добавления отзыва, просто отображает страницу
-$app->get('/add/', function (Request $request, Response $response, array $args){
-    $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"add_review.php");
-});
 
-//Контроллер для добавления отзыва
+//Ендпоинт для добавления отзыва
 $app->post('/api/add_review/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     
@@ -105,17 +116,7 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
 });
 
-//Контроллер отображения страницы удаления отзывов, просто отображает страницу
-$app->get('/api/delete/', function (Request $request, Response $response, array $args){
-    
-    $sqlite = new SQLiteQuery();
-    //Получение всех отзывов, без разделения на страницы
-    $reviews = $sqlite->getAllWithoutPages();
-    $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"delete_review.php", $reviews);
-});
-
-//Контроллер удаления отзыва
+//Ендпоинт удаления отзыва
 $app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
     
     //Создание объекта удаления отзыва
