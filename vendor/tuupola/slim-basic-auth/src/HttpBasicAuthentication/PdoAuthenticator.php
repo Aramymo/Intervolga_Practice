@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /*
 
-Copyright (c) 2013-2020 Mika Tuupola
+Copyright (c) 2013-2024 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +29,8 @@ SOFTWARE.
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
+declare(strict_types=1);
+
 namespace Tuupola\Middleware\HttpBasicAuthentication;
 
 final class PdoAuthenticator implements AuthenticatorInterface
@@ -46,12 +46,11 @@ final class PdoAuthenticator implements AuthenticatorInterface
      */
     public function __construct(array $options = [])
     {
-
         /* Default options. */
         $this->options = [
             "table" => "users",
             "user" => "user",
-            "hash" => "hash"
+            "hash" => "hash",
         ];
 
         if ($options) {
@@ -83,7 +82,7 @@ final class PdoAuthenticator implements AuthenticatorInterface
     {
         $driver = $this->options["pdo"]->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
-        /* Workaround to test without sqlsrv with Travis */
+        /* Workaround to test without sqlsrv with */
         if (defined("__PHPUNIT_ATTR_DRIVER_NAME__")) {
             $driver = __PHPUNIT_ATTR_DRIVER_NAME__;
         }

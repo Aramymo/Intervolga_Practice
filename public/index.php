@@ -3,7 +3,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
-use App\SQLiteQuery;
+use App\sqlitequery;
 use App\SQLiteAdd;
 use App\SQLiteDelete;
 use Tuupola\Middleware\HttpBasicAuthentication as BasicAuthentication;
@@ -58,7 +58,7 @@ $app->get('/add/', function (Request $request, Response $response, array $args){
 //Ендпоинт отображения страницы удаления отзывов
 $app->get('/delete/', function (Request $request, Response $response, array $args){
     
-    $sqlite = new SQLiteQuery();
+    $sqlite = new sqlitequery();
     //Получение всех отзывов, без разделения на страницы
     $reviews = $sqlite->getAllWithoutPages();
     $renderer = new PhpRenderer('./templates/reviews/');
@@ -69,7 +69,7 @@ $app->get('/delete/', function (Request $request, Response $response, array $arg
 $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response, array $args){
     header('Content-type: application/json; charset=utf-8');
     // Создание объекта класса выборки
-    $sqlite = new SQLiteQuery();
+    $sqlite = new sqlitequery();
     // Получение айди отзыва
     $review_id = (int)$args['id'];
     // Вызов метода, который возвращает содержание отзыва
@@ -85,7 +85,7 @@ $app->get('/api/feedbacks/{id}/', function (Request $request, Response $response
 //Ендпоинт для получения всех отзывов с постраничным отображением
 $app->get('/api/feedbacks/page={page}', function (Request $request, Response $response, array $args){
     //
-    $sqlite = new SQLiteQuery();
+    $sqlite = new sqlitequery();
     //получение номера страницы
     $page = (int)$args['page'];
     //получение всех отзывов с этой страницы

@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /*
 
-Copyright (c) 2013-2020 Mika Tuupola
+Copyright (c) 2013-2024 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +29,8 @@ SOFTWARE.
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
+declare(strict_types=1);
+
 namespace Tuupola\Middleware\HttpBasicAuthentication;
 
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,7 +47,7 @@ final class RequestPathRule implements RuleInterface
      */
     private $options = [
         "path" => ["/"],
-        "ignore" => []
+        "ignore" => [],
     ];
 
     /**
@@ -64,7 +64,7 @@ final class RequestPathRule implements RuleInterface
         $uri = (string) preg_replace("#/+#", "/", $uri);
 
         /* If request path is matches ignore should not authenticate. */
-        foreach ((array)$this->options["ignore"] as $ignore) {
+        foreach ((array) $this->options["ignore"] as $ignore) {
             $ignore = rtrim($ignore, "/");
             if (!!preg_match("@^{$ignore}(/.*)?$@", $uri)) {
                 return false;
@@ -72,7 +72,7 @@ final class RequestPathRule implements RuleInterface
         }
 
         /* Otherwise check if path matches and we should authenticate. */
-        foreach ((array)$this->options["path"] as $path) {
+        foreach ((array) $this->options["path"] as $path) {
             $path = rtrim($path, "/");
             if (!!preg_match("@^{$path}(/.*)?$@", $uri)) {
                 return true;

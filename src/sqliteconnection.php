@@ -4,7 +4,7 @@ namespace App;
 /**
  * SQLite connnection
  */
-class SQLiteConnection {
+class sqliteconnection {
     private static $instance = null;
     private $connection = null;
 
@@ -22,7 +22,7 @@ class SQLiteConnection {
         }
     }
 
-    public static function getInstance(): SQLiteConnection
+    public static function getInstance(): sqliteconnection
     {
         //Проверка наличия подключения
         if (null === self::$instance)

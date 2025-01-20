@@ -9,20 +9,13 @@
         </style>
     </head>
     <body>
-    <?php
-    $path = __DIR__ . '/../config/config.json';
-    $config_handle = fopen($path, 'r');
-    $text = fread($config_handle,filesize($path));
-    $json = json_decode($text, true);
-    fclose($config_handle);
-    ?>
+        <?php include_once "header.php"?>
         <div class="div-box popup">
             <div class="child">
                 <h2>Добро пожаловать на страницу отзывов!</h2>
                 <h4>Здесь Вы можете оставить свой отзыв или посмотреть отзывы других пользователей!</h4>
             </div>
             <div>
-<!--                    <p> <a href="regandlog/login.php"><button class="button1"><span>Login</span></button></a> </p>-->
                 <p> <a href="/add/"><button class="button1" ><span>Написать отзыв</span></button></a>
                 <p> <a href="/feedbacks/"><button class="button2"><span>Посмотреть отзывы</span></button></a> </p>
             </div>

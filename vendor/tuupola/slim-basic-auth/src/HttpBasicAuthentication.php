@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /*
 
-Copyright (c) 2013-2020 Mika Tuupola
+Copyright (c) 2013-2024 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,18 +29,20 @@ SOFTWARE.
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
+declare(strict_types=1);
+
 namespace Tuupola\Middleware;
 
 use Closure;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use SplStack;
 use Tuupola\Http\Factory\ResponseFactory;
 use Tuupola\Middleware\DoublePassTrait;
-use Tuupola\Middleware\HttpBasicAuthentication\AuthenticatorInterface;
 use Tuupola\Middleware\HttpBasicAuthentication\ArrayAuthenticator;
+use Tuupola\Middleware\HttpBasicAuthentication\AuthenticatorInterface;
 use Tuupola\Middleware\HttpBasicAuthentication\RequestMethodRule;
 use Tuupola\Middleware\HttpBasicAuthentication\RequestPathRule;
 use Tuupola\Middleware\HttpBasicAuthentication\RuleInterface;
@@ -69,7 +69,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
         "authenticator" => null,
         "before" => null,
         "after" => null,
-        "error" => null
+        "error" => null,
     ];
 
     /**
@@ -78,7 +78,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
     public function __construct(array $options = [])
     {
         /* Setup stack for rules */
-        $this->rules = new SplStack;
+        $this->rules = new SplStack();
 
         /* Store passed in options overwriting any defaults */
         $this->hydrate($options);
@@ -86,14 +86,14 @@ final class HttpBasicAuthentication implements MiddlewareInterface
         /* If array of users was passed in options create an authenticator */
         if (is_array($this->options["users"])) {
             $this->options["authenticator"] = new ArrayAuthenticator([
-                "users" => $this->options["users"]
+                "users" => $this->options["users"],
             ]);
         }
 
         /* If nothing was passed in options add default rules. */
         if (!isset($options["rules"])) {
             $this->rules->push(new RequestMethodRule([
-                "ignore" => ["OPTIONS"]
+                "ignore" => ["OPTIONS"],
             ]));
         }
 
@@ -101,7 +101,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
         if (null !== $this->options["path"]) {
             $this->rules->push(new RequestPathRule([
                 "path" => $this->options["path"],
-                "ignore" => $this->options["ignore"]
+                "ignore" => $this->options["ignore"],
             ]));
         }
 
@@ -133,7 +133,8 @@ final class HttpBasicAuthentication implements MiddlewareInterface
             /* if 'headers' is in the 'relaxed' key, then we check for forwarding */
             $allowedForward = false;
             if (in_array("headers", $this->options["relaxed"])) {
-                if ($request->getHeaderLine("X-Forwarded-Proto") === "https"
+                if (
+                    $request->getHeaderLine("X-Forwarded-Proto") === "https"
                     && $request->getHeaderLine('X-Forwarded-Port') === "443"
                 ) {
                     $allowedForward = true;
@@ -150,19 +151,22 @@ final class HttpBasicAuthentication implements MiddlewareInterface
         }
 
         /* Just in case. */
-        $params = ["user" => null, "password" => null];
+        $params = [
+            "user" => null,
+            "password" => null,
+        ];
 
         if (preg_match("/Basic\s+(.*)$/i", $request->getHeaderLine("Authorization"), $matches)) {
             $explodedCredential = explode(":", base64_decode($matches[1]), 2);
             if (count($explodedCredential) == 2) {
-                list($params["user"], $params["password"]) = $explodedCredential;
+                [$params["user"], $params["password"]] = $explodedCredential;
             }
         }
 
         /* Check if user authenticates. */
         if (false === $this->options["authenticator"]($params)) {
             /* Set response headers before giving it to error callback */
-            $response = (new ResponseFactory)
+            $response = (new ResponseFactory())
                 ->createResponse(401)
                 ->withHeader(
                     "WWW-Authenticate",
@@ -170,13 +174,14 @@ final class HttpBasicAuthentication implements MiddlewareInterface
                 );
 
             return $this->processError($response, [
-                "message" => "Authentication failed"
+                "message" => "Authentication failed",
+                "params" => $params,
             ]);
         }
 
         /* Modify $request before calling next middleware. */
         if (is_callable($this->options["before"])) {
-            $response = (new ResponseFactory)->createResponse(200);
+            $response = (new ResponseFactory())->createResponse(200);
             $before_request = $this->options["before"]($request, $params);
             if ($before_request instanceof ServerRequestInterface) {
                 $request = $before_request;
@@ -254,15 +259,18 @@ final class HttpBasicAuthentication implements MiddlewareInterface
      * Set path where middleware should bind to.
      *
      * @param string|string[] $path
+     * @phpstan-ignore method.unused
      */
     private function path($path): void
     {
         $this->options["path"] = (array) $path;
     }
+
     /**
      * Set path which middleware ignores.
      *
      * @param string[] $ignore
+     * @phpstan-ignore method.unused
      */
     private function ignore($ignore): void
     {
@@ -271,6 +279,8 @@ final class HttpBasicAuthentication implements MiddlewareInterface
 
     /**
      * Set the authenticator.
+     *
+     * @phpstan-ignore method.unused
      */
     private function authenticator(callable $authenticator): void
     {
@@ -281,6 +291,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
      * Set the users array.
      *
      * @param string[] $users
+     * @phpstan-ignore method.unused
      */
     private function users(array $users): void
     {
@@ -289,6 +300,8 @@ final class HttpBasicAuthentication implements MiddlewareInterface
 
     /**
      * Set the secure flag.
+     *
+     * @phpstan-ignore method.unused
      */
     private function secure(bool $secure): void
     {
@@ -299,6 +312,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
      * Set hosts where secure rule is relaxed.
      *
      * @param string[] $relaxed
+     * @phpstan-ignore method.unused
      */
     private function relaxed(array $relaxed): void
     {
@@ -307,6 +321,8 @@ final class HttpBasicAuthentication implements MiddlewareInterface
 
     /**
      * Set the handler which is called before other middlewares.
+     *
+     * @phpstan-ignore method.unused
      */
     private function before(Closure $before): void
     {
@@ -315,6 +331,8 @@ final class HttpBasicAuthentication implements MiddlewareInterface
 
     /**
      * Set the handler which is called after other middlewares.
+     *
+     * @phpstan-ignore method.unused
      */
     private function after(Closure $after): void
     {
@@ -323,6 +341,8 @@ final class HttpBasicAuthentication implements MiddlewareInterface
 
     /**
      * Set the handler which is if authentication fails.
+     *
+     * @phpstan-ignore method.unused
      */
     private function error(callable $error): void
     {
@@ -333,10 +353,11 @@ final class HttpBasicAuthentication implements MiddlewareInterface
      * Set the rules
      *
      * @param RuleInterface[] $rules
+     * @phpstan-ignore method.unused
      */
     private function rules(array $rules): void
     {
-        $this->rules = new SplStack;
+        $this->rules = new SplStack();
         foreach ($rules as $callable) {
             $this->rules->push($callable);
         }
@@ -355,7 +376,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
         $new = clone $this;
         /* Clear the stack */
         unset($new->rules);
-        $new->rules = new SplStack;
+        $new->rules = new SplStack();
 
         /* Add the rules */
         foreach ($rules as $callable) {
@@ -374,6 +395,7 @@ final class HttpBasicAuthentication implements MiddlewareInterface
     {
         $new = clone $this;
         $new->rules = clone $this->rules;
+        /* @phpstan-ignore-next-line */
         $new->rules->push($callable);
         return $new;
     }

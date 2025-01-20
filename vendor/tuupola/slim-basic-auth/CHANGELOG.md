@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+# [3.4.0](https://github.com/tuupola//slim-basic-auth/compare/3.3.1...3.4.0) - 2024-10-01
+### Added
+- Allow installing with `psr/http-message:^2.0` ([#126](https://github.com/tuupola/slim-basic-auth/pull/126/files))
+- Error handler now receives $params ([#121](https://github.com/tuupola/slim-basic-auth/pull/121/files))
+
+### Changed
+- Coding standard is now PSR-12 ([#109](https://github.com/tuupola/slim-basic-auth/pull/109/files))
 
 # [3.3.1](https://github.com/tuupola//slim-basic-auth/compare/3.3.0...3.3.1) - 2020-10-28
 ### Fixed
@@ -10,14 +17,14 @@ All notable changes to this project will be documented in this file, in reverse 
 # [3.3.0](https://github.com/tuupola//slim-basic-auth/compare/3.2.1...3.3.0) - 2020-09-23
 
 ### Added
-- Allow installing with PHP 8 ([#99](https://github.com/tuupola/slim-basic-auth/pull/99/files)).
+- Allow installing with PHP 8 ([#99](https://github.com/tuupola/slim-basic-auth/pull/99/files))
 
 # [3.2.1](https://github.com/tuupola//slim-basic-auth/compare/3.2.0...3.2.1) - 2018-10-15
 ### Added
 - Support for tuupola/callable-handler:^1.0 and tuupola/http-factory:^1.0
 
 ### Changed
-- `psr/http-message:^1.0.1` is now minimum requirement.
+- `psr/http-message:^1.0.1` is now minimum requirement
 
 # [3.2.0](https://github.com/tuupola//slim-basic-auth/compare/3.1.0...3.2.0) - 2018-08-07
 ### Added
@@ -25,7 +32,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## [3.1.0](https://github.com/tuupola/slim-basic-auth/compare/3.0.0...3.1.0) - 2018-05-06
 ### Added
-- Option to trust `X-Forwarded-Proto` and `X-Forwarded-Port` when detecting https requests.
+- Option to trust `X-Forwarded-Proto` and `X-Forwarded-Port` when detecting https requests
 
 ## [3.0.0](https://github.com/tuupola/slim-basic-auth/compare/2.3.0...3.0.0) - 2018-03-01
 

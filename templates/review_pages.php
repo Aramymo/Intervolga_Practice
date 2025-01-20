@@ -9,9 +9,7 @@
     </style>
 </head>
 <body>
-<div class="sticky-header" id="sticky_header">
-    <a href="/" class="home_button">На главную</a>
-</div>
+    <?php include_once "header.php"?>
 <br>
 <div id = 'pages' class = "centered_text">
 </div>
@@ -21,13 +19,8 @@
 <!--data-->
 </div>
 <div class="centered_text">
-<!--    pages-->
-<!--    <script src="scripts/stickyHeader.js"></script>-->
-    <script> <?php include('scripts/stickyHeader.js')?></script>
-    <script> <?php include('scripts/jquery-3.6.1.js')?></script>
-    <script> <?php include('scripts/get_reviews.js')?></script>
-<!--    <script src="scripts/jquery-3.6.1.js"></script>-->
-<!--    <script src="scripts/get_reviews.js"></script>-->
+<script> <?php include('scripts/jquery-3.6.1.js')?></script>
+<script> <?php include('scripts/get_reviews.js')?></script>
 </div>
 </body>
 </html>

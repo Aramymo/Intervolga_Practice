@@ -10,15 +10,12 @@
     </style>
 </head>
 <body>
-<div class="sticky-header" id="sticky_header">
-    <a href="/" class="home_button">На главную</a>
-</div>
+    <?php include_once __DIR__ . "/../header.php"?>
 <div>
     <form method="post" class="form-design" id="send-review" action="/add/">
         <div class="centered_text form-header">ОТЗЫВ</div>
         <div class="form-container">
             <input type="text" name="username" id="username">
-<!--            <input type="text" name="rating" id="rating">-->
             <?php include "stars.html"?>
             <input type="text" name="comment" placeholder="Оставьте комментарий!" id="comment">
             <button type="submit" name="Send review" class="btn-login">Оставить отзыв</button>
@@ -26,7 +23,6 @@
         </div>
     </form>
 </div>
-<script> <?php include __DIR__ . '/../scripts/stickyHeader.js'?></script>
 <script> <?php include __DIR__ . '/../scripts/jquery-3.6.1.js'?></script>
 <script> <?php include __DIR__ . '/../scripts/send_review.js'?></script>
 </body>
