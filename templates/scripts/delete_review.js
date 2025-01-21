@@ -1,4 +1,4 @@
-function Delete(id){
+function deleteRewiew(id){
     //Запись айди отзыва
     var formData ={
         review_id: id,
@@ -14,4 +14,8 @@ function Delete(id){
             window.location.reload();
         }
     });
-};
+}
+
+function redirectToIdForm(id) {
+    window.location.href = '/admin_panel/update/' + id;
+}

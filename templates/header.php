@@ -1,9 +1,9 @@
 <div class="sticky-header" id="sticky_header">
     <a href="/" class="home_button">На главную</a>
     <?php if(empty($_SESSION['AUTHORIZED'])) { ?>
-            <a href="/delete/">SOSAL?</a>
+            <a href="/admin_panel/">SOSAL?</a>
     <?php } else {?>
-        <a href="/delete/">Aboba</a>
+        <a href="/">Aboba</a>
     <?php } ?>
 </div>
 

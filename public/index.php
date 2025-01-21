@@ -26,7 +26,7 @@ fclose($config_handle);
 $app->addMiddleware(new SessionMiddleware());
 
 $app->add(new BasicAuthentication([
-        "path" => ["/api/delete_review/", "/delete/", "/api/quit/"],
+        "path" => ["/api/delete_review/", "/admin_panel/", "/api/quit/"],
         "users" => [
                 $json['Admin_Login'] => $json['Admin_Password']
         ],
@@ -69,12 +69,21 @@ $app->get('/add/', function (Request $request, Response $response){
 });
 
 //Ендпоинт отображения страницы удаления отзывов
-$app->get('/delete/', function (Request $request, Response $response){
+$app->get('/admin_panel/', function (Request $request, Response $response){
     $sqlite = new sqlitequery();
     //Получение всех отзывов, без разделения на страницы
     $reviews = $sqlite->getAllWithoutPages();
     $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"delete_review.php", $reviews);
+    return $renderer->render($response,"admin_panel.php", $reviews);
+});
+
+$app->get('/admin_panel/update/{id}', function (Request $request, Response $response, array $args){
+
+    $sqlite = new sqlitequery();
+    $id = (int)$args['id'];
+    $reviewData = $sqlite->getReviewById($id);
+    $renderer = new PhpRenderer('./templates/reviews/');
+    return $renderer->render($response, 'update_review.php', $reviewData);
 });
 
 //Ендпоинт для получения определённого отзыва
@@ -106,7 +115,6 @@ $app->get('/api/feedbacks/page={page}', function (Request $request, Response $re
     $response->getBody()->write($results);
    return $response->withHeader("Access-Control-Allow-Origin",'*');
 });
-
 
 //Ендпоинт для добавления отзыва
 $app->post('/api/add_review/', function (Request $request, Response $response){
@@ -140,6 +148,21 @@ $app->post('/api/delete_review/', function (Request $request, Response $response
     return $response
         ->withHeader("Access-Control-Allow-Origin",'*')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
+});
+
+$app->post('/api/update_review/', function (Request $request, Response $response){
+    //Создание объекта удаления отзыва
+    $sqlite = new \App\sqliteupdate();
+    $data = $request->getParsedBody();
+    $review_id = $data['review_id'];
+    $username = $data['username'];
+    $rating = $data['rating'];
+    $comment = $data['comment'];
+    //Удаление отзыва из БД
+    print_r($sqlite->updateReview($review_id, $username, $rating, $comment));
+    return $response
+            ->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
 });
 
 $app->run();

@@ -11,16 +11,14 @@
 <body>
     <?php include_once "header.php"?>
 <br>
-<div id = 'pages' class = "centered_text">
-</div>
-<div id = "reviews"">
+    <div id = 'pages' class = "centered_text"></div>
+    <div id = "reviews"></div>
 
-</div>
+
 <!--data-->
-</div>
-<div class="centered_text">
-<script> <?php include('scripts/jquery-3.6.1.js')?></script>
-<script> <?php include('scripts/get_reviews.js')?></script>
-</div>
+
+
+    <script> <?php include('scripts/jquery-3.6.1.js')?></script>
+    <script> <?php include('scripts/get_reviews.js')?></script>
 </body>
 </html>

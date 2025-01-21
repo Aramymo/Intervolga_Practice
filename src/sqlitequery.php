@@ -16,7 +16,7 @@ class sqlitequery{
         //Получение строки
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         //Заполнение массива
-        $review[] = [
+        $review = [
             'review_id' => $row['review_id'],
             'username' => $row['username'],
             'rating' => $row['rating'],
