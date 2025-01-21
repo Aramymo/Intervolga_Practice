@@ -50,7 +50,7 @@ class sqlitequery{
         //Подготовка запроса
         $stmt = sqliteconnection::prepare('SELECT * FROM reviews
                                      ORDER BY review_date DESC, review_id DESC LIMIT :page_first_result, :results_per_page;');
-        $stmt->execute(array('page_first_result' => $page_first_result, 'results_per_page' => $results_per_page));
+        $stmt->execute(array(':page_first_result' => $page_first_result, ':results_per_page' => $results_per_page));
         // for storing reviews
         $reviews = [];
 

@@ -5,6 +5,7 @@
     <title>Feedback</title>
 </head>
 <body>
+    <?php include_once __DIR__ . "/../header.php"?>
 <h1>Удаление отзывов</h1>
 <p>Отзывы удаляются безвозвратно</p>
 <div>

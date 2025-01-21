@@ -1,11 +1,13 @@
 <?php
+
+use App\Middleware\SessionMiddleware;
+use App\SQLiteAdd;
+use App\SQLiteDelete;
+use App\sqlitequery;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
-use App\sqlitequery;
-use App\SQLiteAdd;
-use App\SQLiteDelete;
 use Tuupola\Middleware\HttpBasicAuthentication as BasicAuthentication;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -15,7 +17,24 @@ $app->addErrorMiddleware(true,true,false);
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
-//Открытие конфиг. файла для получения информации об администраторе
+$path = __DIR__ . '/../config/config.json';
+$config_handle = fopen($path, 'r');
+$text = fread($config_handle,filesize($path));
+$json = json_decode($text, true);
+fclose($config_handle);
+
+$app->addMiddleware(new SessionMiddleware());
+
+$app->add(new BasicAuthentication([
+        "path" => ["/api/delete_review/", "/delete/", "/api/quit/"],
+        "users" => [
+                $json['Admin_Login'] => $json['Admin_Password']
+        ],
+        "before" => function ($request, $arguments) use ($json) {
+            return $request->withAttribute("AUTHORIZED", $arguments["user"]);
+        },
+]));
+
 $path = __DIR__ . '/../config/config.json';
 $config_handle = fopen($path, 'r');
 $text = fread($config_handle,filesize($path));
@@ -24,12 +43,6 @@ fclose($config_handle);
 
 //Добавление аутентификации, на перечисленные в path пути будет
 //требоваться логин и пароль, правильные указаны в users
-$app->add(new BasicAuthentication([
-    "path" => ["/api/delete_review/", "/api/delete/"],
-    "users" => [
-        $json['Admin_Login'] => $json['Admin_Password']
-    ]
-]));
 
 //Hello world ендпоинт
 $app->get('/hello', function(Request $request, Response $response){
@@ -44,20 +57,19 @@ $app->get('/', function (Request $request, Response $response){
 });
 
 //Ендпоинт отображения страницы отзывов
-$app->get('/feedbacks/', function (Request $request, Response $response, array $args){
+$app->get('/feedbacks/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates/');
     return $renderer->render($response,"review_pages.php");
 });
 
 //Ендпоинт отображения страницы добавления отзыва
-$app->get('/add/', function (Request $request, Response $response, array $args){
+$app->get('/add/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates/reviews/');
     return $renderer->render($response,"add_review.php");
 });
 
 //Ендпоинт отображения страницы удаления отзывов
-$app->get('/delete/', function (Request $request, Response $response, array $args){
-    
+$app->get('/delete/', function (Request $request, Response $response){
     $sqlite = new sqlitequery();
     //Получение всех отзывов, без разделения на страницы
     $reviews = $sqlite->getAllWithoutPages();
@@ -97,7 +109,7 @@ $app->get('/api/feedbacks/page={page}', function (Request $request, Response $re
 
 
 //Ендпоинт для добавления отзыва
-$app->post('/api/add_review/', function (Request $request, Response $response, array $args){
+$app->post('/api/add_review/', function (Request $request, Response $response){
     header('Content-type: application/json; charset=utf-8');
     
     //Создание объекта класса добавления
@@ -117,7 +129,7 @@ $app->post('/api/add_review/', function (Request $request, Response $response, a
 });
 
 //Ендпоинт удаления отзыва
-$app->post('/api/delete_review/', function (Request $request, Response $response, array $args){
+$app->post('/api/delete_review/', function (Request $request, Response $response){
     
     //Создание объекта удаления отзыва
     $sqlite = new SQLiteDelete();
