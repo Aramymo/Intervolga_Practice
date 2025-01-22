@@ -5,7 +5,7 @@ $("form").submit(function(event){
         rating: $('input[name=rating]:checked').val(),
         comment: $("#comment").val(),
     };
-    console.log(formData.review_id);
+
     $.ajax({
         url : "http://localhost:8888/api/update_review/",
         type: "POST",

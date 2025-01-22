@@ -21,4 +21,5 @@
             </div>
         </div>
     </body>
+    <script> <?php include_once('scripts/jquery-3.6.1.js')?></script>
 </html>

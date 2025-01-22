@@ -1,6 +1,7 @@
 <?php
 
 use App\Middleware\SessionMiddleware;
+use App\Middleware\AuthMiddleware;
 use App\SQLiteAdd;
 use App\SQLiteDelete;
 use App\sqlitequery;
@@ -9,7 +10,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
-use Tuupola\Middleware\HttpBasicAuthentication as BasicAuthentication;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,38 +18,8 @@ $app->addErrorMiddleware(true,true,false);
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
-$path = __DIR__ . '/../config/config.json';
-$config_handle = fopen($path, 'r');
-$text = fread($config_handle,filesize($path));
-$json = json_decode($text, true);
-fclose($config_handle);
-
+$app->addMiddleware(new AuthMiddleware(array("/api/delete_review/", "/admin_panel/", "/api/quit/")));
 $app->addMiddleware(new SessionMiddleware());
-
-$app->add(new BasicAuthentication([
-        "path" => ["/api/delete_review/", "/admin_panel/", "/api/quit/"],
-        "users" => [
-                $json['Admin_Login'] => $json['Admin_Password']
-        ],
-        "before" => function ($request, $arguments) use ($json) {
-            return $request->withAttribute("AUTHORIZED", $arguments["user"]);
-        },
-]));
-
-$path = __DIR__ . '/../config/config.json';
-$config_handle = fopen($path, 'r');
-$text = fread($config_handle,filesize($path));
-$json = json_decode($text, true);
-fclose($config_handle);
-
-//Добавление аутентификации, на перечисленные в path пути будет
-//требоваться логин и пароль, правильные указаны в users
-
-//Hello world ендпоинт
-$app->get('/hello', function(Request $request, Response $response){
-   $response->getBody()->write("Hello World!");
-   return $response;
-});
 
 //Ендпоинт отображения домашней страницы
 $app->get('/', function (Request $request, Response $response){
@@ -69,6 +39,21 @@ $app->get('/add/', function (Request $request, Response $response){
     return $renderer->render($response,"add_review.php");
 });
 
+$app->get('/auth', function (Request $request, Response $response){
+    $renderer = new PhpRenderer('./templates/');
+    return $renderer->render($response,"login_page.php");
+});
+
+$app->post('/deauth', function (Request $request, Response $response){
+    session_unset();
+
+    session_destroy();
+    return $response
+            ->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST')
+            ->withHeader('Location', '/');
+});
+
 //Ендпоинт отображения страницы удаления отзывов
 $app->get('/admin_panel/', function (Request $request, Response $response){
     $sqlite = new sqlitequery();
@@ -84,6 +69,33 @@ $app->get('/admin_panel/update/{id}', function (Request $request, Response $resp
     $reviewData = $sqlite->getReviewById($id);
     $renderer = new PhpRenderer('./templates/reviews/');
     return $renderer->render($response, 'update_review.php', $reviewData);
+});
+
+$app->post('/api/authorize/', function (Request $request, Response $response){
+    $data = $request->getParsedBody();
+    $username = $data['username'];
+    $password = $data['password'];
+    $path = __DIR__ . '/../config/config.json';
+    $config_handle = fopen($path, 'r');
+    $text = fread($config_handle,filesize($path));
+    $json = json_decode($text, true);
+    fclose($config_handle);
+
+    if ($username === $json['Admin_Login'] && $password === $json['Admin_Password']) {
+        $_SESSION['AUTHORIZED'] = 1;
+        if (empty($data['redirect_uri'])) {
+            $data['redirect_uri'] = '/';
+        }
+
+        return $response->withHeader("Access-Control-Allow-Origin",'*')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST')
+                ->withHeader('Location', $data['redirect_uri'])
+                ->withStatus(200);
+    }
+
+    return $response->withHeader("Access-Control-Allow-Origin",'*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST')
+            ->withStatus(401);
 });
 
 //Ендпоинт для получения определённого отзыва

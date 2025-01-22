@@ -14,11 +14,7 @@
     <div id = 'pages' class = "centered_text"></div>
     <div id = "reviews"></div>
 
-
-<!--data-->
-
-
-    <script> <?php include('scripts/jquery-3.6.1.js')?></script>
-    <script> <?php include('scripts/display_reviews.js')?></script>
+    <script> <?php include_once('scripts/jquery-3.6.1.js')?></script>
+    <script> <?php include_once('scripts/display_reviews.js')?></script>
 </body>
 </html>
