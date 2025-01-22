@@ -18,7 +18,18 @@ $app->addErrorMiddleware(true,true,false);
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
-$app->addMiddleware(new AuthMiddleware(array("/api/delete_review/", "/admin_panel/", "/api/quit/")));
+$app->addMiddleware(new AuthMiddleware(array(
+        "protected" => array(
+                "/admin_panel/",
+                "/deauth",
+        ),
+        "ignore" => array(
+                '/api/add_review/',
+                '/api/feedbacks/page',
+            '/api/authorize',
+        ),
+)));
+
 $app->addMiddleware(new SessionMiddleware());
 
 //Ендпоинт отображения домашней страницы

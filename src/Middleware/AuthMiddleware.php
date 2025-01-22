@@ -18,23 +18,47 @@ final class AuthMiddleware implements MiddlewareInterface
      * @return Response The response
      */
 
-    private array $endpoints;
+    private array $protectedEndpoints;
+    private array $ignoredEndpoints;
 
     public function __construct(array $endpoints)
     {
-        $this->endpoints = $endpoints;
+        $this->protectedEndpoints = $endpoints['protected'];
+        $this->ignoredEndpoints = $endpoints['ignore'];
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): Response
     {
         $currentUri = $request->getUri()->getPath();
+        $currentUri = (string) preg_replace("#/+#", "/", $currentUri);
 
-        if (in_array($currentUri, $this->endpoints) && empty($_SESSION['AUTHORIZED'])) {
+        if (self::isUriProtected($currentUri) && empty($_SESSION['AUTHORIZED'])) {
+            if (str_contains($currentUri,'/api/')) {
+                header('Location', '/');
+            } else {
+                header('Location', '/auth?redirect=' . $currentUri);
+            }
             return (new \Slim\Psr7\Response())
-                    ->withHeader('Location', '/auth?redirect=' . $currentUri)
-                    ->withStatus(302);
+                    ->withStatus(401);
         }
 
         return $handler->handle($request);
+    }
+
+    private function isUriProtected(string $currentUri): bool {
+        foreach ($this->ignoredEndpoints as $ignored) {
+            $ignored = rtrim($ignored, "/");
+            if (!!preg_match("@^{$ignored}(/.*)?$@", $currentUri)) {
+                return false;
+            }
+        }
+
+        foreach ($this->protectedEndpoints as $protected) {
+            $protected = rtrim($protected, "/");
+            if (!!preg_match("@^{$protected}(/.*)?$@", $currentUri)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

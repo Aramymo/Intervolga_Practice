@@ -15,10 +15,32 @@
     <form method="post" class="form-design" id="update-review" action="/update/">
         <div class="centered_text form-header">ОТЗЫВ</div>
         <div class="form-container">
-            <input type="text" name="username" id="username" value="<?=$data['username']?>">
-            <p>Оценка: <?=$data['rating']?>/10</p>
+            <p>
+                <input type="text" name="username" id="username" value="<?=$data['username']?>">
+            </p>
+            <p>
+                Оценка: <?=$data['rating']?>/10
+            </p>
             <div class="rating" id="rating"></div>
-            <input type="text" name="comment" placeholder="Комментарий" id="comment" value="<?=$data['comment']?>">
+            <p>
+                <label for="email">Почта для связи</label>
+                <input type="email" name="email" id="email">
+            </p>
+            <p>
+                <label for="pepyaka">Пепяка?</label>
+                <select name="pepyaka" id="pepyaka">
+                    <option value="pe">Пепяка</option>
+                    <option value="pya">Пепя</option>
+                    <option value="ka">Пяка</option>
+                </select>
+            </p>
+            <p>
+                <label for="agree">Сосал?</label>
+                <input type="checkbox" name="agree" id="agree">
+            </p>
+            <p>
+                <input type="text" name="comment" placeholder="Комментарий" id="comment" value="<?=$data['comment']?>">
+            </p>
             <input type="hidden" name="review_id" value="<?=$data['review_id']?>">
             <button type="submit" name="Update review" class="btn-login">Изменить отзыв</button>
             <div id="review_message"></div>

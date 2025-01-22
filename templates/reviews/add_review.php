@@ -15,9 +15,30 @@
     <form method="post" class="form-design" id="send-review" action="/add/">
         <div class="centered_text form-header">ОТЗЫВ</div>
         <div class="form-container">
-            <input type="text" name="username" id="username">
-            <?php include "stars.html"?>
-            <input type="text" name="comment" placeholder="Оставьте комментарий!" id="comment">
+            <p>
+                <label for="username">Ваше имя</label>
+                <input type="text" name="username" id="username">
+            </p>
+            <div class="rating" id="rating"></div>
+            <p>
+                <label for="email">Почта для связи</label>
+                <input type="email" name="email" id="email">
+            </p>
+            <p>
+                <label for="pepyaka">Пепяка?</label>
+                <select name="pepyaka" id="pepyaka">
+                    <option value="pe">Пепяка</option>
+                    <option value="pya">Пепя</option>
+                    <option value="ka">Пяка</option>
+                </select>
+            </p>
+            <p>
+                <label for="agree">Сосал?</label>
+                <input type="checkbox" name="agree" id="agree">
+            </p>
+            <p>
+                <input type="text" name="comment" placeholder="Оставьте комментарий!" id="comment">
+            </p>
             <button type="submit" name="Send review" class="btn-login">Оставить отзыв</button>
             <div id="review_message"></div>
         </div>
@@ -25,5 +46,6 @@
 </div>
 <script> <?php include_once __DIR__ . '/../scripts/jquery-3.6.1.js'?></script>
 <script> <?php include_once __DIR__ . '/../scripts/send_review.js'?></script>
+    <script> <?php include_once __DIR__ . '/../scripts/stars.js'?></script>
 </body>
 </html>
