@@ -19,6 +19,6 @@
 
 
     <script> <?php include('scripts/jquery-3.6.1.js')?></script>
-    <script> <?php include('scripts/get_reviews.js')?></script>
+    <script> <?php include('scripts/display_reviews.js')?></script>
 </body>
 </html>

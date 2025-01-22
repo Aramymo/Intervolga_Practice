@@ -17,7 +17,7 @@
     <div id = "reviews"></div>
 
 <script> <?php include __DIR__ . '/../scripts/jquery-3.6.1.js'?></script>
-<script> <?php include __DIR__ . '/../scripts/delete_review.js'?></script>
-    <script> <?php include(__DIR__ . '/../scripts/get_reviews.js')?></script>
+<script> <?php include __DIR__ . '/../scripts/admin_panel.js'?></script>
+    <script> <?php include(__DIR__ . '/../scripts/display_reviews.js')?></script>
 </body>
 </html>

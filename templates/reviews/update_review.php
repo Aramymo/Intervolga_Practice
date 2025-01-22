@@ -19,7 +19,7 @@
             <p>Оценка: <?=$data['rating']?>/10</p>
             <div class="rating" id="rating"></div>
             <input type="text" name="comment" placeholder="Комментарий" id="comment" value="<?=$data['comment']?>">
-            <input type="hidden" name="id" value="<?=$data['review_id']?>">
+            <input type="hidden" name="review_id" value="<?=$data['review_id']?>">
             <button type="submit" name="Update review" class="btn-login">Изменить отзыв</button>
             <div id="review_message"></div>
         </div>

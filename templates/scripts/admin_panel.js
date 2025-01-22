@@ -1,5 +1,4 @@
 function deleteRewiew(id){
-    //Запись айди отзыва
     var formData ={
         review_id: id,
     };

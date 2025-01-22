@@ -4,6 +4,7 @@ use App\Middleware\SessionMiddleware;
 use App\SQLiteAdd;
 use App\SQLiteDelete;
 use App\sqlitequery;
+use App\sqliteupdate;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
@@ -78,7 +79,6 @@ $app->get('/admin_panel/', function (Request $request, Response $response){
 });
 
 $app->get('/admin_panel/update/{id}', function (Request $request, Response $response, array $args){
-
     $sqlite = new sqlitequery();
     $id = (int)$args['id'];
     $reviewData = $sqlite->getReviewById($id);
@@ -152,7 +152,7 @@ $app->post('/api/delete_review/', function (Request $request, Response $response
 
 $app->post('/api/update_review/', function (Request $request, Response $response){
     //Создание объекта удаления отзыва
-    $sqlite = new \App\sqliteupdate();
+    $sqlite = new sqliteupdate();
     $data = $request->getParsedBody();
     $review_id = $data['review_id'];
     $username = $data['username'];

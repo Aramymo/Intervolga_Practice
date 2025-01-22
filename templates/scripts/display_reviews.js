@@ -52,8 +52,8 @@ function addAdminPanel(id) {
     let adminPanel = "";
 
     if (typeof deleteRewiew === 'function' && typeof redirectToIdForm === 'function') {
-        adminPanel = "<button onclick='deleteRewiew("+ id +")'> Удалить отзыв</button>" +
-                "<button onclick='redirectToIdForm("+ id +")'> Редактировать отзыв</button>";
+        adminPanel = "<button class='btn btn-danger' onclick='deleteRewiew("+ id +")'> Удалить отзыв</button>" +
+                "<button class='btn btn-info' onclick='redirectToIdForm("+ id +")'> Редактировать отзыв</button>";
     }
 
     return adminPanel;
