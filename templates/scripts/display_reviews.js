@@ -21,13 +21,18 @@ async function displayReviewList(id) {
             let reviewBlock = document.createElement('div');
             reviewBlock.className = 'row review_block';
             reviewBlock.id = element['review_id'];
+            element['satisfaction'] = element['satisfaction'] === 'true' ? 'Да' : 'Нет';
+            element['comment'] = element['comment'] ? element['comment'] : 'Комментарий не оставлен';
             reviewBlock.innerHTML = `
                 <div class='row-md-4'>
                     <h3>${element['username']}</h3>
                 </div>
                 ${addAdminPanel(element['review_id'])}
                 <div class='row-md-8'>
+                <p>Почта для связи: ${element['email'] || 'Не указано'}</p>
                     <h5>${element['rating']}/10</h5>
+                    <p>Обозреваемый товар: ${element['reviewed_product'] || 'Не указано'}</p>
+                    <p>Товаром доволен? ${element['satisfaction']}</p>
                     <p>${element['comment']}</p>
                 </div>
             `;

@@ -16,15 +16,15 @@ class sqlitequery{
         //Получение строки
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         //Заполнение массива
-        $review = [
-            'review_id' => $row['review_id'],
-            'username' => $row['username'],
-            'rating' => $row['rating'],
-            'review_date' => $row['review_date'],
-            'comment' => $row['comment'],
-        ];
+//        $review = [
+//            'review_id' => $row['review_id'],
+//            'username' => $row['username'],
+//            'rating' => $row['rating'],
+//            'review_date' => $row['review_date'],
+//            'comment' => $row['comment'],
+//        ];
 
-        return $review;
+        return $row;
     }
     public function getAllReviews($page)
     {
@@ -55,14 +55,16 @@ class sqlitequery{
         $reviews = [];
 
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $reviews[] = [
-                'review_id' => $row['review_id'],
-                'username' => $row['username'],
-                'rating' => $row['rating'],
-                'review_date' => $row['review_date'],
-                'comment' => $row['comment'],
-                'number_of_pages' => $number_of_pages,
-            ];
+            $row['number_of_pages'] = $number_of_pages;
+            $reviews[] = $row;
+//            $reviews[] = [
+//                'review_id' => $row['review_id'],
+//                'username' => $row['username'],
+//                'rating' => $row['rating'],
+//                'review_date' => $row['review_date'],
+//                'comment' => $row['comment'],
+//                'number_of_pages' => $number_of_pages,
+//            ];
         }
         return $reviews;
     }
@@ -71,6 +73,6 @@ class sqlitequery{
         $stmt = sqliteconnection::prepare('SELECT * FROM reviews ORDER BY review_date DESC, review_id DESC;');
         $stmt->execute();
         $result = $stmt->fetchAll();
-        return $result;
+        return $stmt->fetchAll();
     }
 }

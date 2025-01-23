@@ -1,10 +1,21 @@
 $("form").submit(function(event){
     //Запись всех данных, полученных из формы
-    var formData ={
+    const formData = {
         username: $("#username").val(),
         rating: $('input[name=rating]:checked').val(),
+        email: $("#email").val(),
+        reviewed_product: $("#reviewed_product").val(),
+        satisfaction: $('#satisfaction').is(':checked'),
         comment: $("#comment").val(),
     };
+
+    if (formData.rating === undefined) {
+        document.getElementById('review_message').innerHTML = '';
+        document.getElementById("review_message").innerHTML += "<div class='review_send_status_error centered_text'>Пожалуйста поставьте оценку</div>";
+        event.preventDefault();
+        return;
+    }
+
     $.ajax({
         //выполнение пост-запроса
         url : "http://localhost:8888/api/add_review/",

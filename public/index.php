@@ -32,6 +32,12 @@ $app->addMiddleware(new AuthMiddleware(array(
 
 $app->addMiddleware(new SessionMiddleware());
 
+$reviewedProductTypes = array(
+        'Мебель' => 'Мебель',
+        'Еда' => 'Еда',
+        'Техника' => 'Техника',
+);
+
 //Ендпоинт отображения домашней страницы
 $app->get('/', function (Request $request, Response $response){
     $renderer = new PhpRenderer('./templates');
@@ -45,9 +51,9 @@ $app->get('/feedbacks/', function (Request $request, Response $response){
 });
 
 //Ендпоинт отображения страницы добавления отзыва
-$app->get('/add/', function (Request $request, Response $response){
+$app->get('/add/', function (Request $request, Response $response) use ($reviewedProductTypes) {
     $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"add_review.php");
+    return $renderer->render($response,"add_review.php", $reviewedProductTypes);
 });
 
 $app->get('/auth', function (Request $request, Response $response){
@@ -74,10 +80,11 @@ $app->get('/admin_panel/', function (Request $request, Response $response){
     return $renderer->render($response,"admin_panel.php", $reviews);
 });
 
-$app->get('/admin_panel/update/{id}', function (Request $request, Response $response, array $args){
+$app->get('/admin_panel/update/{id}', function (Request $request, Response $response, array $args) use ($reviewedProductTypes) {
     $sqlite = new sqlitequery();
     $id = (int)$args['id'];
     $reviewData = $sqlite->getReviewById($id);
+    $reviewData['select_fields'] = $reviewedProductTypes;
     $renderer = new PhpRenderer('./templates/reviews/');
     return $renderer->render($response, 'update_review.php', $reviewData);
 });
@@ -147,11 +154,11 @@ $app->post('/api/add_review/', function (Request $request, Response $response){
     $sqlite = new SQLiteAdd();
     //Получение данных из пост-запроса
     $data = $request->getParsedBody();
-    $username = $data['username'];
-    $rating = $data['rating'];
-    $comment = $data['comment'];
+//    $username = $data['username'];
+//    $rating = $data['rating'];
+//    $comment = $data['comment'];
     //Запись полученных данных в БД
-    $result = $sqlite->addReview($username, $rating, $comment);
+    $result = $sqlite->addReview($data);
     $result = json_encode($result,JSON_UNESCAPED_UNICODE);
     $response->getbody()->write($result);
     return $response
@@ -177,12 +184,13 @@ $app->post('/api/update_review/', function (Request $request, Response $response
     //Создание объекта удаления отзыва
     $sqlite = new sqliteupdate();
     $data = $request->getParsedBody();
-    $review_id = $data['review_id'];
-    $username = $data['username'];
-    $rating = $data['rating'];
-    $comment = $data['comment'];
-    //Удаление отзыва из БД
-    print_r($sqlite->updateReview($review_id, $username, $rating, $comment));
+//    $review_id = $data['review_id'];
+//    $username = $data['username'];
+//    $rating = $data['rating'];
+//    $comment = $data['comment'];
+
+    $sqlite->updateReview($data['review_id'], $data);
+
     return $response
             ->withHeader("Access-Control-Allow-Origin",'*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST');

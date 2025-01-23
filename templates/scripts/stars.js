@@ -1,5 +1,6 @@
 const maxRating = 10; // Максимальное количество звёзд
 const ratingContainer = document.getElementById('rating');
+const ratingValue = ratingContainer.getAttribute('user-rating');
 
 for (let i = 1; i <= maxRating; i++) {
     const label = document.createElement('label');
@@ -9,6 +10,10 @@ for (let i = 1; i <= maxRating; i++) {
     input.name = 'rating';
     input.value = i;
     input.id = `rating${i}`;
+
+    if (ratingValue !== undefined && i == ratingValue) {
+        input.checked = true;
+    }
 
     const span = document.createElement('span');
     span.className = 'icon';
