@@ -34,12 +34,15 @@ final class AuthMiddleware implements MiddlewareInterface
 
         if (self::isUriProtected($currentUri) && empty($_SESSION['AUTHORIZED'])) {
             if (str_contains($currentUri,'/api/')) {
+                return (new \Slim\Psr7\Response())
+                        ->withHeader('Location', '/')
+                        ->withStatus(301);
                 header('Location', '/');
             } else {
-                header('Location', '/auth?redirect=' . $currentUri);
+                return (new \Slim\Psr7\Response())
+                        ->withHeader('Location', '/auth?redirect=' . $currentUri)
+                        ->withStatus(302);
             }
-            return (new \Slim\Psr7\Response())
-                    ->withStatus(401);
         }
 
         return $handler->handle($request);

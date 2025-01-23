@@ -25,7 +25,7 @@ $app->addMiddleware(new AuthMiddleware(array(
         ),
         "ignore" => array(
                 '/api/add_review/',
-                '/api/feedbacks/page',
+                '/api/feedbacks/',
             '/api/authorize',
         ),
 )));
