@@ -53,7 +53,7 @@ $app->get('/feedbacks/', function (Request $request, Response $response){
 //Ендпоинт отображения страницы добавления отзыва
 $app->get('/add/', function (Request $request, Response $response) use ($reviewedProductTypes) {
     $renderer = new PhpRenderer('./templates/reviews/');
-    return $renderer->render($response,"add_review.php", $reviewedProductTypes);
+    return $renderer->render($response,"add_review.php", array( 'select_fields' => $reviewedProductTypes));
 });
 
 $app->get('/auth', function (Request $request, Response $response){
