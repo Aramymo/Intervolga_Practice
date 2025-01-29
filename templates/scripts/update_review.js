@@ -1,5 +1,5 @@
 $("form").submit(function(event){
-    const formData ={
+    const formData = {
         review_id: $("#review_id").val(),
         username: $("#username").val(),
         rating: $('input[name=rating]:checked').val(),

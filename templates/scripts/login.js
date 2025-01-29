@@ -1,5 +1,5 @@
 $("form").submit(function(event){
-    var formData ={
+    const formData = {
         username: $("#username").val(),
         password: $("#password").val(),
         redirect_uri: new URLSearchParams(window.location.search).get('redirect'),

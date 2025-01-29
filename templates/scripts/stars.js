@@ -1,4 +1,4 @@
-const maxRating = 10; // Максимальное количество звёзд
+const maxRating = 10;
 const ratingContainer = document.getElementById('rating');
 const ratingValue = ratingContainer.getAttribute('user-rating');
 
@@ -17,7 +17,7 @@ for (let i = 1; i <= maxRating; i++) {
 
     const span = document.createElement('span');
     span.className = 'icon';
-    span.textContent = '★'.repeat(i); // Заполнение звёздочками
+    span.textContent = '★'.repeat(i);
 
     label.appendChild(input);
     label.appendChild(span);

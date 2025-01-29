@@ -1,47 +1,39 @@
 <?php
+
 namespace App;
 
-/**
- * SQLite connnection
- */
 class sqliteconnection {
     private static $instance = null;
     private $connection = null;
 
-    protected function __construct()
-    {
-        //Открытие конфиг.файла для получения пути к БД
+    protected function __construct() {
         $path = __DIR__ . '/../config/config.json';
         $config_handle = fopen($path, 'r');
         $text = fread($config_handle,filesize($path));
         $json = json_decode($text, true);
         fclose($config_handle);
+
         if ($this->connection == null) {
-            //Подключение к БД
             $this->connection = new \PDO("sqlite:" . $json['DB_Path']);
         }
     }
 
-    public static function getInstance(): sqliteconnection
-    {
-        //Проверка наличия подключения
-        if (null === self::$instance)
+    public static function getInstance(): sqliteconnection {
+
+        if (self::$instance === null)
         {
-            //Создание объекта, если подключения нет
             self::$instance = new static();
         }
+
         return self::$instance;
     }
 
-    public static function connect(): \PDO
-    {
-        //Проверка подключения
+    public static function connect(): \PDO {
         return static::getInstance()->connection;
     }
 
-    public static function prepare($statement): \PDOStatement
+    public static function prepare(string $statement): \PDOStatement
     {
-        //Подготовка запроса
         return static::connect()->prepare($statement);
     }
 }

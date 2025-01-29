@@ -1,6 +1,6 @@
 <div class="sticky-header" id="sticky_header">
     <a href="/" class="header_button">На главную</a>
-    <?php print_r($_SESSION) ?>
+    <div id="pages"></div>
     <?php if(empty($_SESSION['AUTHORIZED'])) { ?>
             <a href="/auth" class="header_button">Вход</a>
     <?php } else {?>

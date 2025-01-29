@@ -5,9 +5,7 @@ use App\sqliteconnection;
 
 class SQLiteAdd
 {
-    public function addReview(array $reveiwData /*$username, $rating, $comment*/): bool
-    {
-        //Получение даты оставления отзыва
+    public function addReview(array $reviewData): bool {
         $reviewDate = date("Y-m-d");
         $stmt = sqliteconnection::prepare('INSERT INTO reviews (
                      username,
@@ -27,13 +25,13 @@ class SQLiteAdd
                     :comment);'
         );
 
-        $stmt->bindParam(':username', $reveiwData['username']);
-        $stmt->bindParam(':email', $reveiwData['email']);
+        $stmt->bindParam(':username', $reviewData['username']);
+        $stmt->bindParam(':email', $reviewData['email']);
         $stmt->bindParam(':review_date', $reviewDate);
-        $stmt->bindParam(':rating', $reveiwData['rating']);
-        $stmt->bindParam(':reviewed_product', $reveiwData['reviewed_product']);
-        $stmt->bindParam(':satisfaction', $reveiwData['satisfaction']);
-        $stmt->bindParam(':comment', $reveiwData['comment']);
+        $stmt->bindParam(':rating', $reviewData['rating']);
+        $stmt->bindParam(':reviewed_product', $reviewData['reviewed_product']);
+        $stmt->bindParam(':satisfaction', $reviewData['satisfaction']);
+        $stmt->bindParam(':comment', $reviewData['comment']);
 
         return $stmt->execute();
     }

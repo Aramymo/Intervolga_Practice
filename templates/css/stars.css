@@ -69,6 +69,7 @@
 }
 
 .rating:not(:hover) label input:checked ~ .icon,
+
 .rating:hover label:hover input ~ .icon {
     color: #f4511e;
 }

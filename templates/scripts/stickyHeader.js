@@ -1,13 +1,14 @@
 //запускается при прокручивании страницы
-window.onscroll = function() {myFunction()};
+window.onscroll = function() {stickyHeader()};
 
-var header = document.getElementById("sticky_header");
-var sticky = header.offsetTop;
+let headerElement = document.getElementById("sticky_header");
+let offset = headerElement.offsetTop;
+console.log('sticky offsetTop ', offset);
 
-function myFunction() {
-    if (window.scrollY > sticky) {
-        header.classList.add("sticky");
+function stickyHeader() {
+    if (window.scrollY > offset) {
+        headerElement.classList.add("sticky");
     } else {
-        header.classList.remove("sticky");
+        headerElement.classList.remove("sticky");
     }
 }

@@ -1,13 +1,9 @@
 <?php
 
 namespace App;
-use App\sqliteconnection;
 
-class sqliteupdate
-{
-    public function updateReview($id, $reviewData)
-    {
-        // Подготовка SQL-запроса для обновления отзыва
+class sqliteupdate {
+    public function updateReview(int $id, array $reviewData): bool {
         $stmt = sqliteconnection::prepare('UPDATE reviews 
                                             SET username = :username,
                                                 email = :email, 
@@ -16,7 +12,7 @@ class sqliteupdate
                                                 satisfaction = :satisfaction, 
                                                 comment = :comment 
                                             WHERE review_id = :review_id;');
-        // Привязка параметров
+
         $stmt->bindParam(':review_id', $id);
         $stmt->bindParam(':username', $reviewData['username']);
         $stmt->bindParam(':email', $reviewData['email']);

@@ -2,22 +2,25 @@
 displayReviewList(1);
 async function displayReviewList(id) {
     try {
-        let elementsData = await getElements(id); // Используем await для асинхронного вызова
+        let elementsData = await getElements(id);
         document.getElementById('reviews').innerHTML = '';
         document.getElementById('pages').innerHTML = '';
 
-        // Отображение страниц
         for (let num_of_pages = 1; num_of_pages <= elementsData[0]['number_of_pages']; num_of_pages++) {
             let pageLink = document.createElement('a');
             pageLink.id = num_of_pages;
             pageLink.className = 'page_link';
+
+            if (pageLink.id == id) {
+                pageLink.className += ' active';
+            }
+
             pageLink.onclick = () => displayReviewList(num_of_pages);
             pageLink.textContent = num_of_pages;
             document.getElementById("pages").appendChild(pageLink);
         }
 
-        // Запись отзывов
-        for (const element of elementsData) { // Используем for...of для перебора массива
+        for (const element of elementsData) {
             let reviewBlock = document.createElement('div');
             reviewBlock.className = 'row review_block';
             reviewBlock.id = element['review_id'];

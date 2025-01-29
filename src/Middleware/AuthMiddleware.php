@@ -9,26 +9,15 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class AuthMiddleware implements MiddlewareInterface
 {
-    /**
-     * Invoke middleware.
-     *
-     * @param ServerRequestInterface $request The request
-     * @param RequestHandlerInterface $handler The handler
-     *
-     * @return Response The response
-     */
-
     private array $protectedEndpoints;
     private array $ignoredEndpoints;
 
-    public function __construct(array $endpoints)
-    {
+    public function __construct(array $endpoints) {
         $this->protectedEndpoints = $endpoints['protected'];
         $this->ignoredEndpoints = $endpoints['ignore'];
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): Response
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): Response {
         $currentUri = $request->getUri()->getPath();
         $currentUri = (string) preg_replace("#/+#", "/", $currentUri);
 
@@ -37,7 +26,6 @@ final class AuthMiddleware implements MiddlewareInterface
                 return (new \Slim\Psr7\Response())
                         ->withHeader('Location', '/')
                         ->withStatus(301);
-                header('Location', '/');
             } else {
                 return (new \Slim\Psr7\Response())
                         ->withHeader('Location', '/auth?redirect=' . $currentUri)
@@ -51,6 +39,7 @@ final class AuthMiddleware implements MiddlewareInterface
     private function isUriProtected(string $currentUri): bool {
         foreach ($this->ignoredEndpoints as $ignored) {
             $ignored = rtrim($ignored, "/");
+
             if (!!preg_match("@^{$ignored}(/.*)?$@", $currentUri)) {
                 return false;
             }
@@ -58,10 +47,12 @@ final class AuthMiddleware implements MiddlewareInterface
 
         foreach ($this->protectedEndpoints as $protected) {
             $protected = rtrim($protected, "/");
+
             if (!!preg_match("@^{$protected}(/.*)?$@", $currentUri)) {
                 return true;
             }
         }
+
         return false;
     }
 }

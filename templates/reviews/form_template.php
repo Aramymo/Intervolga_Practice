@@ -2,15 +2,13 @@
     <div class="centered_text form-header">ОТЗЫВ</div>
     <div class="form-container">
         <p>
-            <input type="text" name="username" id="username" value="<?=$data['username']?>">
-        </p>
-        <p>
-            Оценка: <?=$data['rating']?>/10
+            <label for="username">Имя</label>
+            <input type="text" name="username" id="username" value="<?=$data['username']?>" required>
         </p>
         <div class="rating" id="rating" user-rating="<?=$data['rating']?>"></div>
         <p>
             <label for="email">Почта для связи</label>
-            <input type="email" name="email" id="email" value="<?=$data['email']?>">
+            <input type="email" name="email" id="email" value="<?=$data['email']?>" required>
         </p>
         <p>
             <label for="reviewed_product">Тип продукта для обзора</label>
@@ -22,7 +20,7 @@
         </p>
         <p>
             <label for="satisfaction">Довольны товаром?</label>
-            <input type="checkbox" name="satisfaction" id="satisfaction" <?=$data['satisfaction'] ? 'checked' : ''?>
+            <input type="checkbox" name="satisfaction" id="satisfaction" <?=$data['satisfaction'] === 'true' ? 'checked' : ''?>
                     class="form_checkbox">
         </p>
         <p>

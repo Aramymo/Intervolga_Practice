@@ -9,12 +9,6 @@
     </style>
 </head>
 <body>
-    <?php include_once "header.php"?>
-<br>
-    <div id = 'pages' class = "centered_text"></div>
-    <div id = "reviews"></div>
-
-    <script> <?php include_once('scripts/jquery-3.6.1.js')?></script>
-    <script> <?php include_once('scripts/display_reviews.js')?></script>
+    <?php include_once (__DIR__ . '/reviews/display_reviews.php')?>
 </body>
 </html>
